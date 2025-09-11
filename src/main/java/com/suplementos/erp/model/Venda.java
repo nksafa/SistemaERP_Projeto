@@ -9,7 +9,11 @@ import java.util.List;
 @Table(name = "vendas")
 public class Venda implements Serializable {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private Date dataVenda;
