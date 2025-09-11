@@ -14,7 +14,11 @@ import java.util.List;
 @SessionScoped
 public class LoginBean implements Serializable {
 
-    private String username;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String username;
     private String password;
     private String errorMessage;
     private Usuario usuarioLogado;

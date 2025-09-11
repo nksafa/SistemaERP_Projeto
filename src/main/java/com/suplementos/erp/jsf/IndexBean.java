@@ -8,7 +8,11 @@ import java.io.Serializable;
 @SessionScoped // Define o escopo da classe
 public class IndexBean implements Serializable {
 
-    private String mensagem = "Bem-vindo ao sistema ERP da sua loja de suplementos!";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String mensagem = "Bem-vindo ao sistema ERP da sua loja de suplementos!";
 
     // Getter para a variável 'mensagem'
     public String getMensagem() {

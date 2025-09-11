@@ -3,7 +3,6 @@ package com.suplementos.erp.repository;
 import com.suplementos.erp.model.Usuario;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import java.util.List;
 
 public class UsuarioRepository implements IRepository<Usuario> {
