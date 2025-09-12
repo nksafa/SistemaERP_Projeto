@@ -21,7 +21,7 @@ public class Main {
 
         // Inicialização dos serviços (injeção de dependências)
         EstoqueService estoqueService = new EstoqueService(produtoRepository);
-        VendasService vendasService = new VendasService(vendaRepository, produtoRepository, estoqueService);
+        VendasService vendasService = new VendasService(vendaRepository, estoqueService, produtoRepository);
 
 
         // Criando usuários para o exemplo com diferentes papéis e senhas
@@ -101,7 +101,7 @@ public class Main {
                     menuCadastroProdutos(scanner, estoqueService);
                     break;
                 case 2:
-                    menuGerenciamentoVendas(scanner, estoqueService, vendasService, usuarioLogado);
+
                     break;
                 case 0:
                     System.out.println("Saindo do sistema. Até mais!");
@@ -239,42 +239,7 @@ public class Main {
         } while (opcaoProdutos != 0);
     }
 
-    private static void menuGerenciamentoVendas(Scanner scanner,EstoqueService estoqueService, VendasService vendasService, Usuario usuarioLogado) {
-        int opcaoVendas;
-        do {
-            System.out.println("\n--- MENU DE VENDAS ---");
-            System.out.println("1. Realizar nova venda");
-            System.out.println("2. Listar histórico de vendas");
-            System.out.println("0. Voltar ao menu principal");
-            System.out.print("Escolha uma opção: ");
-            opcaoVendas = obterOpcaoUsuario(scanner);
 
-            switch (opcaoVendas) {
-                case 1:
-                    System.out.println("\n--- REALIZAR NOVA VENDA ---");
-                    estoqueService.listarTodosOsProdutos();
-                    List<Integer> idsProdutos = escolherProdutos(scanner);
-                    if (idsProdutos.isEmpty()) {
-                        System.out.println("Venda cancelada. Nenhum produto foi selecionado.");
-                        break;
-                    }
-                    // 3. Coletar a forma de pagamento
-                    FormaPagamento formaPagamento = escolherFormaPagamento(scanner);
-
-                    // 4. Realizar a venda
-                    vendasService.realizarVenda(null, usuarioLogado, idsProdutos, formaPagamento);
-                    break;
-                case 2:
-                    vendasService.listarHistoricoDeVendas();
-                    break;
-                case 0:
-                    System.out.println("Voltando...");
-                    break;
-                default:
-                    System.out.println("Opção inválida. Tente novamente.");
-            }
-        } while (opcaoVendas != 0);
-    }
 
     private static void menuAdminGerente(Scanner scanner, EstoqueService estoqueService, VendasService vendasService, Usuario usuarioLogado) {
         int opcaoPrincipal;
@@ -294,7 +259,6 @@ public class Main {
                     menuCadastroProdutos(scanner, estoqueService);
                     break;
                 case 2:
-                    menuGerenciamentoVendas(scanner,estoqueService, vendasService, usuarioLogado);
                     break;
                 case 3:
                     System.out.println("Opção 'Fornecedores e Compras' ainda não implementada.");

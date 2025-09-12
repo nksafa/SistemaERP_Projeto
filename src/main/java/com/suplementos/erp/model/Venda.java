@@ -4,16 +4,13 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "vendas")
 public class Venda implements Serializable {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private Date dataVenda;
@@ -36,24 +33,21 @@ public class Venda implements Serializable {
 
     public Venda() {}
 
+    // Construtor completo e corrigido
     public Venda(int id, Date dataVenda, Usuario cliente, Usuario funcionario, List<Produto> produtos, double valorTotal, FormaPagamento formaPagamento) {
         this.id = id;
         this.dataVenda = dataVenda;
         this.cliente = cliente;
         this.funcionario = funcionario;
-        this.produtosVendidos = converterProdutosParaLista(produtos);
+        // AQUI ESTÁ A CORREÇÃO: Usamos um stream para converter a lista de Produtos em uma lista de nomes
+        this.produtosVendidos = produtos.stream()
+                .map(Produto::getNome)
+                .collect(Collectors.toList());
         this.valorTotal = valorTotal;
         this.formaPagamento = formaPagamento;
     }
 
-    private List<String> converterProdutosParaLista(List<Produto> produtos) {
-        List<String> nomes = new java.util.ArrayList<>();
-        for (Produto p : produtos) {
-            nomes.add(p.getNome());
-        }
-        return nomes;
-    }
-
+    // Outros getters e setters
     public int getId() {
         return id;
     }

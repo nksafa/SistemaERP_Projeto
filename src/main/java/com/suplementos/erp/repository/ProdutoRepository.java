@@ -69,4 +69,12 @@ public class ProdutoRepository implements IRepository<Produto> {
             return session.createQuery("FROM Produto", Produto.class).list();
         }
     }
+
+    public Produto buscarPorNome(String nome) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM Produto WHERE nome = :nome", Produto.class)
+                    .setParameter("nome", nome)
+                    .uniqueResult();
+        }
+    }
 }

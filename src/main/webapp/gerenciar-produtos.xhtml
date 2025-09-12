@@ -43,9 +43,11 @@
     </h:form>
 
     <br/>
-    <h:button value="Cadastrar Novo Produto" action="#{produtoBean.novoProduto}" />
+    <h:form>
+        <h:commandButton value="Cadastrar Novo Produto" action="#{produtoBean.novoProduto}" />
+    </h:form>
     <br/>
-    <h:link value="Voltar para o Dashboard" outcome="dashboard.xhtml" />
+    <h:button value="Voltar para o Dashboard" outcome="dashboard.xhtml" />
 
 </h:body>
 </html>

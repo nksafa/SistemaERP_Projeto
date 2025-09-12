@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view>
+    <h:head>
+        <title>Realizar Venda</title>
+        <h:outputStylesheet name="css/estilo.css" />
+    </h:head>
+    <h:body onload="#{vendaBean.carregarProdutos()}">
+        <h1>Realizar Venda</h1>
+
+        <h:form>
+            <h3>Produtos Disponíveis</h3>
+            <h:dataTable value="#{vendaBean.produtosDisponiveis}" var="p" border="1">
+                <h:column><f:facet name="header">Nome</f:facet>#{p.nome}</h:column>
+                <h:column><f:facet name="header">Preço</f:facet>#{p.preco}</h:column>
+                <h:column>
+                    <f:facet name="header">Adicionar</f:facet>
+                    <h:commandButton value="Adicionar" action="#{vendaBean.adicionarAoCarrinho(p)}" />
+                </h:column>
+            </h:dataTable>
+
+            <h3>Carrinho</h3>
+            <h:dataTable value="#{vendaBean.carrinho}" var="c" border="1">
+                <h:column><f:facet name="header">Nome</f:facet>#{c.nome}</h:column>
+                <h:column><f:facet name="header">Preço</f:facet>#{c.preco}</h:column>
+                <h:column>
+                    <f:facet name="header">Remover</f:facet>
+                    <h:commandButton value="Remover" action="#{vendaBean.removerDoCarrinho(c)}" />
+                </h:column>
+            </h:dataTable>
+
+            <br/>
+            <h3>Total: R$ <h:outputText value="#{vendaBean.valorTotal}" /></h3>
+
+            <h3>Forma de Pagamento</h3>
+            <h:selectOneRadio value="#{vendaBean.formaPagamento}">
+                <f:selectItems value="#{vendaBean.formasPagamento}" var="fp" itemLabel="#{fp.name()}" itemValue="#{fp}"/>
+            </h:selectOneRadio>
+
+            <br/><br/>
+            <h:commandButton value="Finalizar Venda" action="#{vendaBean.finalizarVenda}" />
+        </h:form>
+
+        <br/><br/>
+        <h:link value="Voltar para o Menu de Vendas" outcome="gerenciar-vendas.xhtml" />
+    </h:body>
+</f:view>
+</html>

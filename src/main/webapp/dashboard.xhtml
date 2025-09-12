@@ -15,11 +15,12 @@
 
     <h3>Menu Principal</h3>
 
-    <h:button value="Cadastrar Novo Produto" action="#{produtoBean.novoProduto}" />
-
+    <h:form>
+        <h:commandButton value="Cadastrar Novo Produto" action="#{produtoBean.novoProduto}" />
+    </h:form>
     <h:button value="Gerenciar Produtos" outcome="gerenciar-produtos.xhtml" />
 
-    <h:button value="Histórico de Vendas" outcome="historico-vendas.xhtml" />
+    <h:button value="Gerenciar Vendas" outcome="gerenciar-vendas.xhtml" />
 
     <br/><br/>
     <h:button value="Sair" outcome="login.xhtml?faces-redirect=true" />

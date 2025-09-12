@@ -1,31 +1,58 @@
 package com.suplementos.erp.repository;
 
 import com.suplementos.erp.model.Venda;
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import java.util.List;
-import java.util.Map;
 
 public class VendaRepository implements IRepository<Venda> {
-    private final Map<Integer, Venda> dados = new HashMap<>();
 
+    private final SessionFactory sessionFactory;
+
+    public VendaRepository() {
+        sessionFactory = HibernateUtil.getSessionFactory();
+    }
+
+    // Metodo para salvar e atualizar uma venda no banco de dados
+    public void salvar(Venda venda) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.saveOrUpdate(venda); // O Hibernate cuida de salvar ou atualizar
+            session.getTransaction().commit();
+        }
+    }
+
+    // Este metodo é obrigatório por causa da interface IRepository.
+    // Ele simplesmente chama o metodo salvar correto, que usa o Hibernate.
     @Override
     public void salvar(int id, Venda venda) {
-        dados.put(id, venda);
+        salvar(venda);
     }
 
     @Override
     public Venda buscarPorId(int id) {
-        return dados.get(id);
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Venda.class, id);
+        }
     }
 
     @Override
     public void remover(int id) {
-        dados.remove(id);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Venda venda = session.get(Venda.class, id);
+            if (venda != null) {
+                session.delete(venda);
+            }
+            session.getTransaction().commit();
+        }
     }
 
     @Override
     public List<Venda> buscarTodos() {
-        return new ArrayList<>(dados.values());
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM Venda", Venda.class).list();
+        }
     }
 }
