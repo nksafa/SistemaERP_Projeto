@@ -9,7 +9,7 @@
 </h:head>
 <h:body>
     <h1>Gerenciar Vendas</h1>
-
+    <h:messages globalOnly="true" infoClass="msg-sucesso" errorClass="msg-erro"/>
     <h3>Menu de Vendas</h3>
     <h:form>
         <h:commandButton value="Realizar Venda" action="realizar-venda.xhtml?faces-redirect=true" />
@@ -18,6 +18,6 @@
     </h:form>
 
     <br/>
-    <h:link value="Voltar para o Menu Principal" outcome="dashboard.xhtml" />
+    <h:button value="Voltar para o Menu Principal" outcome="dashboard.xhtml" />
 </h:body>
 </html>

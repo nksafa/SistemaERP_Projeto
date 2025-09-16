@@ -8,8 +8,8 @@ import com.suplementos.erp.service.VendasService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class VendaBean implements Serializable {
 
     private ProdutoRepository produtoRepository;
@@ -82,10 +82,16 @@ public class VendaBean implements Serializable {
         Venda novaVenda = new Venda(0, new Date(), null, usuarioLogado, carrinho, valorTotal, formaPagamento);
         vendasService.realizarVenda(novaVenda);
 
-        // Limpa o carrinho e redireciona
+        // Limpa o carrinho e a forma de pagamento
         carrinho.clear();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Venda Realizada!", "A venda foi concluída com sucesso."));
-        return "dashboard?faces-redirect=true";
+        this.formaPagamento = null; // AQUI ESTÁ A CORREÇÃO PARA O RESET
+
+        // Adiciona a mensagem e a mantém para o próximo redirecionamento
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Venda realizada com sucesso."));
+
+        // Redireciona para a página de Gerenciar Vendas
+        return "gerenciar-vendas.xhtml?faces-redirect=true";
     }
 
     // Getters e Setters

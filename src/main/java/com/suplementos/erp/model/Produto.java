@@ -7,20 +7,24 @@ import java.io.Serializable;
 @Table(name = "produtos")
 public class Produto implements Serializable {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	@Id
+    private static final long serialVersionUID = 1L;
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
     private String descricao;
     private double preco;
+    private double precoCusto;
     private int quantidadeEmEstoque;
     private int estoqueMinimo;
-    private String categoria;
-    private String fornecedor;
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
+    @ManyToOne // Relacionamento com o Fornecedor
+    @JoinColumn(name = "fornecedor_id")
+    private Fornecedor fornecedor;
 
     // O Hibernate exige um construtor vazio
     public Produto() {}
@@ -76,42 +80,38 @@ public class Produto implements Serializable {
         this.estoqueMinimo = estoqueMinimo;
     }
 
-    public String getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
-    public String getFornecedor() {
+    public Fornecedor getFornecedor() {
         return fornecedor;
     }
 
-    public void setFornecedor(String fornecedor) {
+    public void setFornecedor(Fornecedor fornecedor) {
         this.fornecedor = fornecedor;
     }
 
-    public Produto(int id, String nome, String descricao, double preco, int quantidadeEmEstoque, int estoqueMinimo, Categoria categoria, Fornecedor fornecedor) {
+    public double getPrecoCusto() {
+        return precoCusto;
+    }
+    public void setPrecoCusto(double precoCusto) {}
+
+
+    public Produto(int id, String nome, String descricao, double preco, double precoCusto, int quantidadeEmEstoque, int estoqueMinimo, Categoria categoria, Fornecedor fornecedor) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
+        this.precoCusto = precoCusto;
         this.quantidadeEmEstoque = quantidadeEmEstoque;
         this.estoqueMinimo = estoqueMinimo;
-        this.categoria = categoria.getNome(); // Salva apenas o nome da categoria
-        this.fornecedor = fornecedor.getNome(); // Salva apenas o nome do fornecedor
-    }
-
-    // Construtor para casos de edição ou criação sem ID
-    public Produto(String nome, String descricao, double preco, int quantidadeEmEstoque, int estoqueMinimo, Categoria categoria, Fornecedor fornecedor) {
-        this.nome = nome;
-        this.descricao = descricao;
-        this.preco = preco;
-        this.quantidadeEmEstoque = quantidadeEmEstoque;
-        this.estoqueMinimo = estoqueMinimo;
-        this.categoria = categoria.getNome();
-        this.fornecedor = fornecedor.getNome();
+        this.categoria = categoria;
+        this.fornecedor = fornecedor;
     }
 
 }

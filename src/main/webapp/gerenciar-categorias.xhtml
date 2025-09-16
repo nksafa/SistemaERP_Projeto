@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Gerenciar Categorias</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+    <h1>Gerenciar Categorias</h1>
+    <h:messages globalOnly="true" />
+
+    <h3>Cadastrar Nova Categoria</h3>
+    <h:form>
+        <h:panelGrid columns="2">
+            <h:outputLabel value="Nome:" for="nome" />
+            <h:inputText id="nome" value="#{categoriaBean.categoria.nome}" />
+        </h:panelGrid>
+        <br/>
+        <h:commandButton value="Salvar" action="#{categoriaBean.salvar}" />
+    </h:form>
+
+    <br/><br/>
+    <h3>Lista de Categorias</h3>
+    <h:form>
+        <h:dataTable value="#{categoriaBean.listaCategorias}" var="cat" border="1">
+            <h:column><f:facet name="header">ID</f:facet>#{cat.id}</h:column>
+            <h:column><f:facet name="header">Nome</f:facet>#{cat.nome}</h:column>
+            <h:column>
+                <f:facet name="header">Ações</f:facet>
+                <h:commandButton value="Remover" action="#{categoriaBean.remover(cat)}" />
+            </h:column>
+        </h:dataTable>
+    </h:form>
+
+    <br/>
+    <h:button value="Voltar para o Dashboard" outcome="dashboard.xhtml" />
+</h:body>
+</html>

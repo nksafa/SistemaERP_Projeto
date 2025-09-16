@@ -9,6 +9,7 @@
 </h:head>
 <h:body>
     <h1>Cadastro de Produtos</h1>
+    <h:messages globalOnly="true" />
 
     <h:form>
         <h:panelGrid columns="2">
@@ -21,6 +22,9 @@
             <h:outputLabel value="Preço:" for="preco" />
             <h:inputText id="preco" value="#{produtoBean.produto.preco}" />
 
+            <h:outputLabel value="Preço de Custo:" for="precoCusto" />
+            <h:inputText id="precoCusto" value="#{produtoBean.produto.precoCusto}" />
+
             <h:outputLabel value="Estoque:" for="estoque" />
             <h:inputText id="estoque" value="#{produtoBean.produto.quantidadeEmEstoque}" />
 
@@ -28,16 +32,19 @@
             <h:inputText id="estoqueMinimo" value="#{produtoBean.produto.estoqueMinimo}" />
 
             <h:outputLabel value="Categoria:" for="categoria" />
-            <h:inputText id="categoria" value="#{produtoBean.produto.categoria}" />
+            <h:selectOneMenu id="categoria" value="#{produtoBean.categoriaId}">
+                <f:selectItems value="#{produtoBean.categoriasDisponiveis}" var="cat" itemLabel="#{cat.nome}" itemValue="#{cat.id}" />
+            </h:selectOneMenu>
 
             <h:outputLabel value="Fornecedor:" for="fornecedor" />
-            <h:inputText id="fornecedor" value="#{produtoBean.produto.fornecedor}" />
+            <h:selectOneMenu id="fornecedor" value="#{produtoBean.fornecedorId}">
+                <f:selectItems value="#{produtoBean.fornecedoresDisponiveis}" var="forn" itemLabel="#{forn.nome}" itemValue="#{forn.id}" />
+            </h:selectOneMenu>
         </h:panelGrid>
 
         <br/>
         <h:commandButton value="Salvar" action="#{produtoBean.salvar}" />
-        <h:button value="Voltar" outcome="dashboard.xhtml" />
-
+        <h:button value="Voltar" outcome="gerenciar-produtos.xhtml" />
     </h:form>
 </h:body>
 </html>

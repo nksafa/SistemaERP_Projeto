@@ -39,4 +39,8 @@ public class VendasService {
     public List<Venda> listarHistoricoVendas() {
         return vendaRepository.buscarTodos();
     }
+    public void removerVenda(int idVenda) {
+        vendaRepository.remover(idVenda);
+        System.out.println("Venda #" + idVenda + " removida com sucesso.");
+    }
 }

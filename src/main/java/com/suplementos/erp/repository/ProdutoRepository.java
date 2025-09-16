@@ -77,4 +77,11 @@ public class ProdutoRepository implements IRepository<Produto> {
                     .uniqueResult();
         }
     }
+    public List<Produto> buscarPorFornecedor(int idFornecedor) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM Produto WHERE fornecedor.id = :idFornecedor", Produto.class)
+                    .setParameter("idFornecedor", idFornecedor)
+                    .list();
+        }
+    }
 }

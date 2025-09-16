@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Gerenciar Fornecedores</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+    <h1>Gerenciar Fornecedores</h1>
+    <h:messages globalOnly="true" />
+
+    <h3>Cadastrar Novo Fornecedor</h3>
+    <h:form>
+        <h:panelGrid columns="2">
+            <h:outputLabel value="Nome:" for="nome" />
+            <h:inputText id="nome" value="#{fornecedorBean.fornecedor.nome}" />
+
+            <h:outputLabel value="Contato:" for="contato" />
+            <h:inputText id="contato" value="#{fornecedorBean.fornecedor.contato}" />
+        </h:panelGrid>
+        <br/>
+        <h:commandButton value="Salvar" action="#{fornecedorBean.salvar}" />
+    </h:form>
+
+    <br/><br/>
+    <h3>Lista de Fornecedores</h3>
+    <h:form>
+        <h:dataTable value="#{fornecedorBean.listaFornecedores}" var="forn" border="1">
+            <h:column><f:facet name="header">ID</f:facet>#{forn.id}</h:column>
+            <h:column><f:facet name="header">Nome</f:facet>#{forn.nome}</h:column>
+            <h:column><f:facet name="header">Contato</f:facet>#{forn.contato}</h:column>
+            <h:column>
+                <f:facet name="header">Ações</f:facet>
+                <h:commandButton value="Comprar" action="#{compraBean.carregarProdutos(forn.id)}" />
+                <h:commandButton value="Editar" action="#{fornecedorBean.editar(forn)}" />
+                <h:commandButton value="Remover" action="#{fornecedorBean.remover(forn)}" />
+                <h:commandButton value="Histórico" action="#{compraBean.carregarHistorico(forn.id)}" />
+            </h:column>
+        </h:dataTable>
+    </h:form>
+
+    <br/>
+    <h:link value="Voltar para o Dashboard" outcome="dashboard.xhtml" />
+</h:body>
+</html>

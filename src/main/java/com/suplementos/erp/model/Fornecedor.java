@@ -2,20 +2,24 @@ package com.suplementos.erp.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "fornecedores")
 public class Fornecedor implements Serializable {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	@Id
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
     private String contato;
+
+    @OneToMany(mappedBy = "fornecedor", fetch = FetchType.LAZY)
+    private List<Produto> produtos;
 
     public Fornecedor() {}
 
