@@ -80,4 +80,8 @@ public class Compra implements Serializable {
     public Produto getProduto() {
         return produto;
     }
+
+    public double getTotal() {
+        return this.precoUnitario * this.quantidade;
+    }
 }

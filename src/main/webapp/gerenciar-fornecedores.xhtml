@@ -33,15 +33,16 @@
             <h:column><f:facet name="header">Contato</f:facet>#{forn.contato}</h:column>
             <h:column>
                 <f:facet name="header">Ações</f:facet>
-                <h:commandButton value="Comprar" action="#{compraBean.carregarProdutos(forn.id)}" />
+                <h:link value="Comprar" outcome="realizar-compra.xhtml">
+                    <f:param name="fornecedorId" value="#{forn.id}"/>
+                </h:link>
                 <h:commandButton value="Editar" action="#{fornecedorBean.editar(forn)}" />
                 <h:commandButton value="Remover" action="#{fornecedorBean.remover(forn)}" />
-                <h:commandButton value="Histórico" action="#{compraBean.carregarHistorico(forn.id)}" />
             </h:column>
         </h:dataTable>
     </h:form>
-
     <br/>
-    <h:link value="Voltar para o Dashboard" outcome="dashboard.xhtml" />
+    <h:button value="Voltar para o Dashboard" outcome="dashboard.xhtml" />
+    <h:button value="Histórico de Compras" outcome="historico-compras.xhtml" />
 </h:body>
 </html>

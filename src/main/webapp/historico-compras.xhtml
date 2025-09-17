@@ -1,1 +1,26 @@
-<h1>Histórico de Compras</h1>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Histórico de Compras</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+    <h1>Histórico de Compras</h1>
+
+    <h:dataTable value="#{historicoComprasBean.historicoCompras}" var="compra" border="1">
+        <h:column><f:facet name="header">ID</f:facet>#{compra.id}</h:column>
+        <h:column><f:facet name="header">Fornecedor</f:facet>#{compra.fornecedor.nome}</h:column>
+        <h:column><f:facet name="header">Produto</f:facet>#{compra.produto.nome}</h:column>
+        <h:column><f:facet name="header">Preço Unitário</f:facet>#{compra.precoUnitario}</h:column>
+        <h:column><f:facet name="header">Quantidade</f:facet>#{compra.quantidade}</h:column>
+        <h:column><f:facet name="header">Valor Total</f:facet>#{compra.total}</h:column>
+        <h:column><f:facet name="header">Data</f:facet>#{compra.dataCompra}</h:column>
+    </h:dataTable>
+
+    <br/>
+    <h:link value="Voltar para Gerenciamento de Fornecedores" outcome="gerenciar-fornecedores.xhtml" />
+</h:body>
+</html>

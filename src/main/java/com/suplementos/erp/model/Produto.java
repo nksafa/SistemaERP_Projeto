@@ -99,7 +99,8 @@ public class Produto implements Serializable {
     public double getPrecoCusto() {
         return precoCusto;
     }
-    public void setPrecoCusto(double precoCusto) {}
+
+    public void setPrecoCusto(double precoCusto) {this.precoCusto = precoCusto;}
 
 
     public Produto(int id, String nome, String descricao, double preco, double precoCusto, int quantidadeEmEstoque, int estoqueMinimo, Categoria categoria, Fornecedor fornecedor) {
