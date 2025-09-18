@@ -3,16 +3,20 @@ import com.suplementos.erp.model.*;
 import com.suplementos.erp.repository.CategoriaRepository;
 import com.suplementos.erp.repository.FornecedorRepository;
 import com.suplementos.erp.repository.ProdutoRepository;
+
+
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 
 
-    @ManagedBean
+
+@ManagedBean
     @ViewScoped
     public class ProdutoBean implements Serializable {
 
@@ -32,12 +36,28 @@ import javax.faces.context.FacesContext;
 
         @PostConstruct
         public void init() {
+            // Tenta pegar o objeto "produto" que foi guardado no Flash.
+            this.produto = (Produto) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("produto");
+
             this.produtoRepository = new ProdutoRepository();
             this.categoriaRepository = new CategoriaRepository();
             this.fornecedorRepository = new FornecedorRepository();
-            this.produto = new Produto();
+
+            // Se não veio nada do Flash (ou seja, não é uma edição), então cria um produto novo.
+            if (this.produto == null) {
+                this.produto = new Produto();
+            }
+
+            // O resto do seu código continua perfeito
             this.categoriasDisponiveis = categoriaRepository.buscarTodos();
             this.fornecedoresDisponiveis = fornecedorRepository.buscarTodos();
+
+            if (this.produto.getCategoria() != null) {
+                this.categoriaId = this.produto.getCategoria().getId();
+            }
+            if (this.produto.getFornecedor() != null) {
+                this.fornecedorId = this.produto.getFornecedor().getId();
+            }
         }
 
         // Dentro da classe ProdutoBean.java
@@ -88,12 +108,19 @@ import javax.faces.context.FacesContext;
         public List<Fornecedor> getFornecedoresDisponiveis() { return fornecedoresDisponiveis; }
 
         public List<Produto> getListaProdutos() { return produtoRepository.buscarTodos(); }
+
         public String editar(Produto produto) {
-            this.produto = produto;
-            this.categoriaId = produto.getCategoria().getId();
-            this.fornecedorId = produto.getFornecedor().getId();
+            // 1. Pega o "Flash" da requisição atual.
+            Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
+
+            // 2. Coloca o objeto que você quer passar para a próxima página no Flash.
+            // A chave "produto" é um nome que você escolhe.
+            flash.put("produto", produto);
+
+            // 3. O redirect continua o mesmo.
             return "cadastro-produtos.xhtml?faces-redirect=true";
         }
+
         public void remover(Produto produto) {
             produtoRepository.remover(produto.getId());
             this.produto = new Produto();

@@ -3,9 +3,11 @@ package com.suplementos.erp.jsf;
 import com.suplementos.erp.model.Fornecedor;
 import com.suplementos.erp.repository.FornecedorRepository;
 
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
@@ -14,6 +16,8 @@ import java.util.List;
 @ManagedBean
 @ViewScoped
 public class FornecedorBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Fornecedor fornecedor = new Fornecedor();
     private FornecedorRepository fornecedorRepository = new FornecedorRepository();

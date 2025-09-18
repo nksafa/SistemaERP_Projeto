@@ -11,11 +11,17 @@
     <h:body onload="#{vendaBean.carregarProdutos()}">
         <h1>Realizar Venda</h1>
 
+        <h:messages style="color:red;margin:8px;" />
+
         <h:form>
             <h3>Produtos Disponíveis</h3>
             <h:dataTable value="#{vendaBean.produtosDisponiveis}" var="p" border="1">
                 <h:column><f:facet name="header">Nome</f:facet>#{p.nome}</h:column>
-                <h:column><f:facet name="header">Preço</f:facet>#{p.preco}</h:column>
+                <h:column><f:facet name="header">Preço</f:facet>
+                    <h:outputText value="#{p.preco}">
+                        <f:convertNumber type="currency" currencySymbol="R$" />
+                    </h:outputText>
+                </h:column>
                 <h:column>
                     <f:facet name="header">Adicionar</f:facet>
                     <h:commandButton value="Adicionar" action="#{vendaBean.adicionarAoCarrinho(p)}" />
@@ -25,7 +31,11 @@
             <h3>Carrinho</h3>
             <h:dataTable value="#{vendaBean.carrinho}" var="c" border="1">
                 <h:column><f:facet name="header">Nome</f:facet>#{c.nome}</h:column>
-                <h:column><f:facet name="header">Preço</f:facet>#{c.preco}</h:column>
+                <h:column><f:facet name="header">Preço</f:facet>
+                    <h:outputText value="#{c.preco}">
+                        <f:convertNumber type="currency" currencySymbol="R$" />
+                    </h:outputText>
+                </h:column>
                 <h:column>
                     <f:facet name="header">Remover</f:facet>
                     <h:commandButton value="Remover" action="#{vendaBean.removerDoCarrinho(c)}" />
@@ -33,12 +43,31 @@
             </h:dataTable>
 
             <br/>
-            <h3>Total: R$ <h:outputText value="#{vendaBean.valorTotal}" /></h3>
+            <h3>Total:
+                <h:outputText value="#{vendaBean.valorTotal}">
+                    <f:convertNumber type="currency" currencySymbol="R$ " />
+                </h:outputText>
+            </h3>
 
             <h3>Forma de Pagamento</h3>
             <h:selectOneRadio value="#{vendaBean.formaPagamento}">
                 <f:selectItems value="#{vendaBean.formasPagamento}" var="fp" itemLabel="#{fp.name()}" itemValue="#{fp}"/>
+
+                <f:ajax event="change" listener="#{vendaBean.onFormaPagamentoChange}" render="painelParcelas"/>
             </h:selectOneRadio>
+
+            <h:panelGroup id="painelParcelas" layout="block">
+
+                <h:panelGrid columns="2" rendered="#{vendaBean.formaPagamento.toString() eq 'CREDITO'}">
+
+                    <h:outputLabel value="Número de Parcelas:" for="parcelas" />
+                    <h:selectOneMenu id="parcelas" value="#{vendaBean.numeroParcelas}">
+                        <f:selectItem itemLabel="Selecione..." itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{vendaBean.parcelasDisponiveis}" />
+                    </h:selectOneMenu>
+
+                </h:panelGrid>
+            </h:panelGroup>
 
             <br/><br/>
             <h:commandButton value="Finalizar Venda" action="#{vendaBean.finalizarVenda}" />

@@ -3,17 +3,22 @@ package com.suplementos.erp.jsf;
 import com.suplementos.erp.model.Categoria;
 import com.suplementos.erp.repository.CategoriaRepository;
 
+
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
+
 
 @ManagedBean
 @ViewScoped
-public class CategoriaBean implements Serializable {
+public class
+CategoriaBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Categoria categoria;
     private CategoriaRepository categoriaRepository;

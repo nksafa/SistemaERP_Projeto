@@ -3,18 +3,21 @@ package com.suplementos.erp.jsf;
 import com.suplementos.erp.model.Venda;
 import com.suplementos.erp.repository.VendaRepository;
 import com.suplementos.erp.service.VendasService;
-
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+
+
 import java.io.Serializable;
 import java.util.List;
 
 @ManagedBean
 @ViewScoped
 public class HistoricoVendasBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final VendasService vendasService;
     private List<Venda> historicoVendas;

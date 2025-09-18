@@ -12,12 +12,15 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+
 import java.io.Serializable;
 import java.util.List;
 
 @ManagedBean
 @ViewScoped
 public class CompraBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Fornecedor fornecedorAtual;
     private int produtoSelecionadoId;

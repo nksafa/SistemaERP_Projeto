@@ -1,5 +1,6 @@
 package com.suplementos.erp.model;
 
+
 import javax.persistence.*;
 import java.io.Serializable;
 
