@@ -56,7 +56,8 @@ public class FornecedorRepository implements IRepository<Fornecedor> {
     @Override
     public List<Fornecedor> buscarTodos() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM Fornecedor", Fornecedor.class).list();
+            // AQUI ESTÁ A CORREÇÃO: Filtramos por fornecedores ativos
+            return session.createQuery("FROM Fornecedor WHERE ativo = true", Fornecedor.class).list();
         }
     }
 }

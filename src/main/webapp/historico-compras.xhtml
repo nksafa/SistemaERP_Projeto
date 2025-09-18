@@ -18,9 +18,13 @@
         <h:column><f:facet name="header">Quantidade</f:facet>#{compra.quantidade}</h:column>
         <h:column><f:facet name="header">Valor Total</f:facet>#{compra.total}</h:column>
         <h:column><f:facet name="header">Data</f:facet>#{compra.dataCompra}</h:column>
+        <h:column>
+            <f:facet name="header">Ações</f:facet>
+            <h:commandButton value="Remover" action="#{historicoComprasBean.remover(compra)}" onclick="return confirm('Tem certeza que deseja remover esta compra?');" />
+        </h:column>
     </h:dataTable>
 
     <br/>
-    <h:link value="Voltar para Gerenciamento de Fornecedores" outcome="gerenciar-fornecedores.xhtml" />
+    <h:button value="Voltar para Gerenciamento de Fornecedores" outcome="gerenciar-fornecedores.xhtml" />
 </h:body>
 </html>

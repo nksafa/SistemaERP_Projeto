@@ -18,6 +18,8 @@ public class Fornecedor implements Serializable {
     private String nome;
     private String contato;
 
+    private boolean ativo = true;
+
     @OneToMany(mappedBy = "fornecedor", fetch = FetchType.LAZY)
     private List<Produto> produtos;
 
@@ -27,6 +29,14 @@ public class Fornecedor implements Serializable {
         this.id = id;
         this.nome = nome;
         this.contato = contato;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     public int getId() {

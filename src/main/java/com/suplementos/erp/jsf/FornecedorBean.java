@@ -4,8 +4,10 @@ import com.suplementos.erp.model.Fornecedor;
 import com.suplementos.erp.repository.FornecedorRepository;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.List;
 
@@ -30,6 +32,14 @@ public class FornecedorBean implements Serializable {
         fornecedorRepository.salvar(fornecedor);
         this.fornecedor = new Fornecedor();
         this.listaFornecedores = fornecedorRepository.buscarTodos();
+    }
+
+    // Dentro da classe FornecedorBean.java
+
+    public void desativar(Fornecedor fornecedor) {
+        fornecedor.setAtivo(false);
+        fornecedorRepository.salvar(fornecedor);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Fornecedor desativado com sucesso."));
     }
 
     public String editar(Fornecedor fornecedor) {

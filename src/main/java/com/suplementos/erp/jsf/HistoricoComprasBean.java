@@ -7,18 +7,26 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.List;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 @ManagedBean
 @ViewScoped
 public class HistoricoComprasBean implements Serializable {
 
-    private CompraRepository compraRepository;
+    private CompraRepository compraRepository = new CompraRepository();
     private List<Compra> historicoCompras;
 
     @PostConstruct
     public void init() {
-        this.compraRepository = new CompraRepository();
         this.historicoCompras = compraRepository.buscarTodos();
+    }
+
+
+    public void remover(Compra compra) {
+        compraRepository.remover(compra.getId());
+        this.historicoCompras = compraRepository.buscarTodos(); // Recarrega a lista
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Compra removida com sucesso."));
     }
 
     // Getters e Setters

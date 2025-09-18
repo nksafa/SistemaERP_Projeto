@@ -67,6 +67,14 @@ import javax.faces.context.FacesContext;
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Produto salvo com sucesso."));
         }
 
+        // Dentro da classe ProdutoBean.java
+
+        public void desativar(Produto produto) {
+            produto.setAtivo(false);
+            produtoRepository.salvar(produto);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Produto desativado com sucesso."));
+        }
+
         // Getters e Setters
         public Produto getProduto() { return produto; }
         public void setProduto(Produto produto) { this.produto = produto; }

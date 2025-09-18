@@ -26,6 +26,8 @@ public class Produto implements Serializable {
     @JoinColumn(name = "fornecedor_id")
     private Fornecedor fornecedor;
 
+    private boolean ativo = true;
+
     // O Hibernate exige um construtor vazio
     public Produto() {}
 
@@ -101,6 +103,14 @@ public class Produto implements Serializable {
     }
 
     public void setPrecoCusto(double precoCusto) {this.precoCusto = precoCusto;}
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 
 
     public Produto(int id, String nome, String descricao, double preco, double precoCusto, int quantidadeEmEstoque, int estoqueMinimo, Categoria categoria, Fornecedor fornecedor) {

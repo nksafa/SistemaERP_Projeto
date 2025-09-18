@@ -66,7 +66,8 @@ public class ProdutoRepository implements IRepository<Produto> {
     @Override
     public List<Produto> buscarTodos() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM Produto", Produto.class).list();
+            // AQUI ESTÁ A CORREÇÃO: Filtramos por produtos ativos
+            return session.createQuery("FROM Produto WHERE ativo = true", Produto.class).list();
         }
     }
 
