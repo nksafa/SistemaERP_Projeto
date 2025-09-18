@@ -46,9 +46,8 @@ public class FornecedorBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Fornecedor desativado com sucesso."));
     }
 
-    public String editar(Fornecedor fornecedor) {
+    public void editar(Fornecedor fornecedor) {
         this.fornecedor = fornecedor;
-        return "gerenciar-fornecedores.xhtml?faces-redirect=true";
     }
 
     public void remover(Fornecedor fornecedor) {

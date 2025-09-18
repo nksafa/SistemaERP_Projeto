@@ -6,3 +6,29 @@ body {
 h1 {
     color: #2c3e50; /* Cor do texto do cabeçalho */
 }
+
+.estoque-baixo {
+    color: red;
+    font-weight: bold;
+    background-color: #ffebee; /* Um fundo rosa bem claro, opcional */
+}
+
+.alerta-estoque {
+    border: 2px solid #ffb300; /* Laranja/Amarelo escuro */
+    background-color: #fff8e1; /* Amarelo bem claro */
+    color: #4e4e4e;
+    padding: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.alerta-estoque h3 {
+    margin-top: 0;
+    color: #c62828; /* Vermelho escuro */
+}
+
+.alerta-estoque ul {
+    margin-bottom: 0;
+    padding-left: 20px;
+}

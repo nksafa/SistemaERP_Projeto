@@ -13,13 +13,23 @@
 <h:body>
     <h1>Bem-vindo, <h:outputText value="#{loginBean.usuarioLogado.nome}" />!</h1>
 
-
+    <h:panelGroup rendered="#{not empty loginBean.alertasDeEstoque}">
+        <div class="alerta-estoque">
+            <h3>⚠️ Atenção: Estoque Baixo!</h3>
+            <p>Os seguintes produtos estão abaixo do estoque mínimo:</p>
+            <ul>
+                <ui:repeat value="#{loginBean.alertasDeEstoque}" var="produto">
+                    <li>
+                        <h:outputText value="#{produto.nome} (Estoque atual: #{produto.quantidadeEmEstoque} / Mínimo necessário: #{produto.estoqueMinimo})" />
+                    </li>
+                </ui:repeat>
+            </ul>
+        </div>
+    </h:panelGroup>
     <h3>Menu Principal</h3>
 
     <h:button value="Gerenciar Produtos" outcome="gerenciar-produtos.xhtml" />
-
     <h:button value="Gerenciar Vendas" outcome="gerenciar-vendas.xhtml" />
-
     <h:button value="Gerenciar Fornecedores e Compras" outcome="gerenciar-fornecedores.xhtml" />
     <br/>
     <h:button value="Gerenciar Categorias" outcome="gerenciar-categorias.xhtml" />

@@ -3,6 +3,9 @@ package com.suplementos.erp.service;
 import com.suplementos.erp.model.Produto;
 import com.suplementos.erp.repository.ProdutoRepository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class EstoqueService {
     private final ProdutoRepository produtoRepository;
 
@@ -23,6 +26,13 @@ public class EstoqueService {
             System.out.println("Erro: Produto com ID " + id + " não encontrado.");
         }
     }
+
+    public List<Produto> getProdutosComEstoqueBaixo() {
+        return produtoRepository.buscarTodos().stream()
+                .filter(p -> p.getQuantidadeEmEstoque() < p.getEstoqueMinimo())
+                .collect(Collectors.toList());
+    }
+
 
     public void removerProduto(int id) {
         produtoRepository.remover(id);

@@ -12,8 +12,8 @@
     <h:messages globalOnly="true" />
 
     <h3>Cadastrar Novo Fornecedor</h3>
-    <h:form>
-        <h:panelGrid columns="2">
+    <h:form id="formCadastro">
+        <h:panelGrid id="painelCadastro" columns="2">
             <h:outputLabel value="Nome:" for="nome" />
             <h:inputText id="nome" value="#{fornecedorBean.fornecedor.nome}" />
 
@@ -23,7 +23,6 @@
         <br/>
         <h:commandButton value="Salvar" action="#{fornecedorBean.salvar}" />
     </h:form>
-
     <br/><br/>
     <h3>Lista de Fornecedores</h3>
     <h:form>
@@ -36,7 +35,9 @@
                 <h:button value="Comprar" outcome="realizar-compra.xhtml">
                     <f:param name="fornecedorId" value="#{forn.id}"/>
                 </h:button>
-                <h:commandButton value="Editar" action="#{fornecedorBean.editar(forn)}" />
+                <h:commandButton value="Editar" action="#{fornecedorBean.editar(forn)}">
+                    <f:ajax render=":formCadastro:painelCadastro" />
+                </h:commandButton>
                 <h:commandButton value="Desativar" action="#{fornecedorBean.desativar(forn)}" />
             </h:column>
         </h:dataTable>
