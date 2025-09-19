@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Gerenciar Clientes</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+    <h1>Gerenciar Clientes</h1>
+    <h:messages globalOnly="true" />
+
+    <h:form id="formClientes">
+        <h3>Cadastrar / Editar Cliente</h3>
+        <h:panelGrid id="painelCadastro" columns="2">
+            <h:outputLabel value="Nome:" for="nome" />
+            <h:inputText id="nome" value="#{clienteBean.cliente.nome}" required="true" requiredMessage="O nome é obrigatório."/>
+
+            <h:outputLabel value="CPF:" for="cpf" />
+            <h:inputText id="cpf" value="#{clienteBean.cliente.cpf}" required="true" requiredMessage="O CPF é obrigatório."/>
+        </h:panelGrid>
+        <br/>
+        <h:commandButton value="Salvar" action="#{clienteBean.salvar}">
+            <f:ajax execute="@form" render="@form :messages" />
+        </h:commandButton>
+
+        <br/><br/>
+        <h3>Lista de Clientes</h3>
+        <h:dataTable id="tabelaClientes" value="#{clienteBean.listaClientes}" var="cli" border="1">
+            <h:column><f:facet name="header">ID</f:facet>#{cli.id}</h:column>
+            <h:column><f:facet name="header">Nome</f:facet>#{cli.nome}</h:column>
+            <h:column><f:facet name="header">CPF</f:facet>#{cli.cpf}</h:column>
+            <h:column>
+                <f:facet name="header">Ações</f:facet>
+
+                <h:commandButton value="Editar" action="#{clienteBean.editar(cli)}">
+                    <f:ajax render=":formClientes:painelCadastro" />
+                </h:commandButton>
+
+                <h:commandButton value="Remover" action="#{clienteBean.remover(cli)}">
+                    <f:ajax render=":formClientes:tabelaClientes" />
+                </h:commandButton>
+
+                <h:button value="Ver Compras" outcome="historico-cliente.xhtml">
+                    <f:param name="clienteId" value="#{cli.id}"/>
+                </h:button>
+
+            </h:column>
+        </h:dataTable>
+    </h:form>
+    <br/>
+    <h:button value="Voltar" outcome="dashboard.xhtml" />
+</h:body>
+</html>

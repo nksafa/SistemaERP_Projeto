@@ -48,6 +48,19 @@
                     <f:convertNumber type="currency" currencySymbol="R$ " />
                 </h:outputText>
             </h3>
+            <h3>Cliente</h3>
+            <h:panelGrid columns="3" style="vertical-align: middle;">
+                <h:selectOneMenu value="#{vendaBean.clienteId}">
+                    <f:selectItem itemLabel="Selecione um cliente (ou venda sem cadastro)" itemValue="0" />
+                    <f:selectItems value="#{vendaBean.clientesDisponiveis}" var="cli"
+                                   itemLabel="#{cli.nome} - #{cli.cpf}" itemValue="#{cli.id}" />
+                </h:selectOneMenu>
+
+                <h:outputText value=" ou " />
+
+                <h:commandButton value="Cadastrar Novo Cliente" action="#{vendaBean.irParaCadastroCliente}" immediate="true" />
+            </h:panelGrid>
+            <br/>
 
             <h3>Forma de Pagamento</h3>
             <h:selectOneRadio value="#{vendaBean.formaPagamento}">

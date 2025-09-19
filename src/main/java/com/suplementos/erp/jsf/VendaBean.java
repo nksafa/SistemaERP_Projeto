@@ -1,6 +1,7 @@
 package com.suplementos.erp.jsf;
 
 import com.suplementos.erp.model.*;
+import com.suplementos.erp.repository.ClienteRepository;
 import com.suplementos.erp.service.EstoqueService;
 import com.suplementos.erp.repository.ProdutoRepository;
 import com.suplementos.erp.repository.VendaRepository;
@@ -35,6 +36,9 @@ public class VendaBean implements Serializable {
     private Integer numeroParcelas; // Para guardar a parcela selecionada (1, 2, 3...)
     private List<Integer> parcelasDisponiveis; // Para popular o dropdown
 
+    private ClienteRepository clienteRepository;
+    private List<Cliente> clientesDisponiveis;
+    private int clienteId; // Guarda o ID do cliente selecionado no dropdown
 
     // Metodo que é chamado após a criação do bean para inicializar as dependências
     @PostConstruct
@@ -53,6 +57,12 @@ public class VendaBean implements Serializable {
             parcelasDisponiveis.add(i);
 
         }
+        this.clienteRepository = new ClienteRepository();
+        this.clientesDisponiveis = clienteRepository.buscarTodos();
+    }
+
+    public String irParaCadastroCliente() {
+        return "gerenciar-clientes.xhtml?faces-redirect=true";
     }
 
     public void onFormaPagamentoChange() {
@@ -87,66 +97,55 @@ public class VendaBean implements Serializable {
         return FormaPagamento.values();
     }
 
-    // Metodo que finaliza a venda
     public String finalizarVenda() {
 
-        // 1. VERIFICAÇÃO DO USUÁRIO LOGADO
-        // Pega o usuário da sessão para associá-lo à venda.
-        Usuario usuarioLogado = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
+       Usuario usuarioLogado = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
 
-        // Se não houver usuário logado, redireciona para a página de login.
         if (usuarioLogado == null) {
-            // Adiciona uma mensagem de erro para o usuário.
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_WARN, "Atenção", "Sessão expirada. Por favor, faça o login novamente."));
             return "login?faces-redirect=true";
         }
 
-        // 2. VALIDAÇÃO DAS PARCELAS (LÓGICA NOVA)
-        // Se a forma de pagamento for cartão de crédito, o número de parcelas é obrigatório.
         if (formaPagamento == FormaPagamento.CREDITO && (numeroParcelas == null || numeroParcelas <= 0)) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro de Validação", "Por favor, selecione o número de parcelas."));
             return null; // Retorna null para permanecer na mesma página e exibir a mensagem de erro.
         }
 
-        // 3. VALIDAÇÃO DO CARRINHO
-        // Impede a finalização de uma venda com o carrinho vazio.
         if (carrinho == null || carrinho.isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro de Validação", "O carrinho está vazio. Adicione produtos para continuar."));
             return null; // Permanece na mesma página.
         }
 
-        // 4. CRIAÇÃO E PERSISTÊNCIA DA VENDA
-        // Calcula o valor total a partir dos itens do carrinho.
         double valorTotal = getValorTotal();
 
-        // Cria um novo objeto Venda com todos os dados necessários.
-        // Lembre-se que você precisará adicionar o campo 'numeroParcelas' na sua classe Venda.
-        Venda novaVenda = new Venda(0, new Date(), null, usuarioLogado, carrinho, valorTotal, formaPagamento);
-        // vendasService.setNumeroParcelas(this.numeroParcelas); // Exemplo de como você poderia passar as parcelas para o service
 
-        // Chama o serviço que contém a regra de negócio para realizar a venda.
+// <-- INÍCIO DA NOVA LÓgica: Buscar o cliente selecionado
+        Cliente clienteSelecionado = null;
+        // O clienteId vem do dropdown. Se for > 0, significa que um cliente foi escolhido.
+        if (clienteId > 0) {
+            clienteSelecionado = clienteRepository.buscarPorId(clienteId);
+        }
+
+
+        Venda novaVenda = new Venda(0, new Date(), clienteSelecionado, usuarioLogado, carrinho, valorTotal, formaPagamento);
+
         vendasService.realizarVenda(novaVenda);
 
-        // Apenas para depuração, você pode imprimir os dados no console.
         System.out.println("Venda #" + novaVenda.getId() + " finalizada com " + formaPagamento + " em " + this.numeroParcelas + "x");
 
-        // 5. LIMPEZA E FEEDBACK
-        // Limpa o estado do bean para preparar para a próxima venda.
         carrinho.clear();
         this.formaPagamento = null;
         this.numeroParcelas = null; // Limpa o número de parcelas selecionado.
+        this.clienteId = 0;
 
-        // Adiciona uma mensagem de sucesso que será exibida na próxima página (após o redirect).
         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Venda realizada com sucesso."));
 
-        // 6. REDIRECIONAMENTO
-        // Redireciona o usuário para a página de gerenciamento de vendas.
-        return "gerenciar-vendas.xhtml?faces-redirect=true";
+         return "gerenciar-vendas.xhtml?faces-redirect=true";
     }
 
 
@@ -154,6 +153,20 @@ public class VendaBean implements Serializable {
     public Integer getNumeroParcelas() { return numeroParcelas; }
     public void setNumeroParcelas(Integer numeroParcelas) { this.numeroParcelas = numeroParcelas; }
     public List<Integer> getParcelasDisponiveis() { return parcelasDisponiveis; }
+
+    // Adicione estes métodos na sua classe VendaBean.java
+
+    public List<Cliente> getClientesDisponiveis() {
+        return clientesDisponiveis;
+    }
+
+    public int getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(int clienteId) {
+        this.clienteId = clienteId;
+    }
 
     public List<Produto> getProdutosDisponiveis() { return produtosDisponiveis; }
     public void setProdutosDisponiveis(List<Produto> produtosDisponiveis) { this.produtosDisponiveis = produtosDisponiveis; }

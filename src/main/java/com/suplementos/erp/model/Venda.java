@@ -17,13 +17,13 @@ public class Venda implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
-    private Usuario cliente;
+    private Cliente cliente;
 
     @ManyToOne
     @JoinColumn(name = "funcionario_id")
     private Usuario funcionario;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> produtosVendidos;
 
     private double valorTotal;
@@ -34,7 +34,7 @@ public class Venda implements Serializable {
     public Venda() {}
 
     // Construtor completo e corrigido
-    public Venda(int id, Date dataVenda, Usuario cliente, Usuario funcionario, List<Produto> produtos, double valorTotal, FormaPagamento formaPagamento) {
+    public Venda(int id, Date dataVenda, Cliente cliente, Usuario funcionario, List<Produto> produtos, double valorTotal, FormaPagamento formaPagamento) {
         this.id = id;
         this.dataVenda = dataVenda;
         this.cliente = cliente;
@@ -64,11 +64,11 @@ public class Venda implements Serializable {
         this.dataVenda = dataVenda;
     }
 
-    public Usuario getCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 
-    public void setCliente(Usuario cliente) {
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 

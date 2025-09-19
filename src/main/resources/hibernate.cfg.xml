@@ -20,5 +20,6 @@
         <mapping class="com.suplementos.erp.model.Usuario"/>
         <mapping class="com.suplementos.erp.model.Venda"/>
         <mapping class="com.suplementos.erp.model.Compra"/>
+        <mapping class="com.suplementos.erp.model.Cliente"/>
     </session-factory>
 </hibernate-configuration>
