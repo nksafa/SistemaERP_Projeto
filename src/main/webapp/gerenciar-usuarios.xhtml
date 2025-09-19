@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Gerenciar Usuários</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+    <h1>Gerenciar Usuários</h1>
+    <h:messages globalOnly="true" style="color:red;margin:8px;" />
+
+    <h:form id="formUsuarios">
+        <h3>Cadastrar / Editar Usuário</h3>
+        <h:panelGrid id="painelCadastro" columns="2">
+            <h:outputLabel value="Nome de Usuário:" for="nome" />
+            <h:inputText id="nome" value="#{usuarioBean.usuario.nome}" required="true" />
+
+            <h:outputLabel value="Senha:" for="senha" />
+            <h:inputSecret id="senha" value="#{usuarioBean.usuario.senha}" required="#{empty usuarioBean.usuario.codigo}" redisplay="false" />
+
+            <h:outputLabel value="Tipo de Usuário:" for="tipo" />
+            <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipoUsuario}" required="true">
+                <f:selectItems value="#{usuarioBean.tiposDeUsuario}" />
+            </h:selectOneMenu>
+        </h:panelGrid>
+        <br/>
+        <h:commandButton value="Salvar" action="#{usuarioBean.salvar}">
+            <f:ajax execute="@form" render="@form :messages" />
+        </h:commandButton>
+
+        <br/><br/>
+        <h3>Lista de Usuários</h3>
+        <h:dataTable id="tabelaUsuarios" value="#{usuarioBean.listaUsuarios}" var="user" border="1">
+            <h:column><f:facet name="header">ID</f:facet>#{user.codigo}</h:column>
+            <h:column><f:facet name="header">Nome</f:facet>#{user.nome}</h:column>
+            <h:column><f:facet name="header">Tipo</f:facet>#{user.tipoUsuario}</h:column>
+            <h:column>
+                <f:facet name="header">Ações</f:facet>
+
+                <h:commandButton value="Editar" action="#{usuarioBean.editar(user)}">
+                    <f:ajax render=":formUsuarios:painelCadastro" />
+                </h:commandButton>
+
+                <h:commandButton value="Remover" action="#{usuarioBean.remover(user)}">
+                    <f:ajax render=":formUsuarios:tabelaUsuarios" />
+                </h:commandButton>
+            </h:column>
+        </h:dataTable>
+    </h:form>
+    <br/>
+    <h:button value="Voltar" outcome="dashboard.xhtml" />
+</h:body>
+</html>

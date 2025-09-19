@@ -1,11 +1,11 @@
 package com.suplementos.erp.jsf;
 
-import com.suplementos.erp.model.Produto; // <-- NOVO IMPORT
+import com.suplementos.erp.model.Produto;
 import com.suplementos.erp.model.TipoUsuario;
 import com.suplementos.erp.model.Usuario;
-import com.suplementos.erp.repository.ProdutoRepository; // <-- NOVO IMPORT
+import com.suplementos.erp.repository.ProdutoRepository;
 import com.suplementos.erp.repository.UsuarioRepository;
-import com.suplementos.erp.service.EstoqueService; // <-- NOVO IMPORT
+import com.suplementos.erp.service.EstoqueService;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -23,7 +23,6 @@ public class LoginBean implements Serializable {
     private String errorMessage;
     private Usuario usuarioLogado;
 
-    // <-- MUDANÇA: Novo atributo para guardar os alertas na sessão
     private List<Produto> alertasDeEstoque;
 
     private UsuarioRepository usuarioRepository = new UsuarioRepository();
@@ -39,11 +38,17 @@ public class LoginBean implements Serializable {
         }
     }
 
-    // <-- MUDANÇA: Novo método para carregar/atualizar os alertas
+    // Método que busca os dados
     public void carregarAlertasDeEstoque() {
-        // Instancia o serviço e busca os produtos com estoque baixo
         EstoqueService estoqueService = new EstoqueService(new ProdutoRepository());
+        // A busca e atribuição agora é a PRIMEIRA E ÚNICA coisa que este método faz.
         this.alertasDeEstoque = estoqueService.getProdutosComEstoqueBaixo();
+    }
+
+    // O Getter "inteligente" que garante que os dados sejam carregados
+    public List<Produto> getAlertasDeEstoque() {
+        carregarAlertasDeEstoque();
+        return alertasDeEstoque;
     }
 
     public String login() {
@@ -53,21 +58,13 @@ public class LoginBean implements Serializable {
             this.usuarioLogado = usuario;
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", usuarioLogado);
 
-            // <-- MUDANÇA: A lógica do Flash Scope foi removida מכאן
-            // Agora, apenas chamamos o método para atualizar a lista de alertas
-            carregarAlertasDeEstoque();
-
+            // A chamada foi removida daqui, pois o getter agora é responsável por isso.
             return "dashboard?faces-redirect=true";
         } else {
             errorMessage = "Usuário ou senha incorretos.";
             FacesContext.getCurrentInstance().addMessage(null, new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "Erro", "Usuário ou senha incorretos."));
             return "login?faces-redirect=true";
         }
-    }
-
-    // <-- MUDANÇA: Novo getter para a lista de alertas
-    public List<Produto> getAlertasDeEstoque() {
-        return alertasDeEstoque;
     }
 
     // Getters e Setters existentes

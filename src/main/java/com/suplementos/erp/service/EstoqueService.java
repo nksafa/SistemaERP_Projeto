@@ -3,6 +3,7 @@ package com.suplementos.erp.service;
 import com.suplementos.erp.model.Produto;
 import com.suplementos.erp.repository.ProdutoRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,16 @@ public class EstoqueService {
     }
 
     public List<Produto> getProdutosComEstoqueBaixo() {
-        return produtoRepository.buscarTodos().stream()
+        List<Produto> todosOsProdutos = produtoRepository.buscarTodos();
+
+        // Passo de segurança: se o repositório retornar nulo, nós garantimos uma lista vazia.
+        if (todosOsProdutos == null) {
+            return new ArrayList<>(); // Retorna uma lista vazia, NUNCA null.
+        }
+
+        // A lógica de filtro com Stream API é a mais segura e concisa.
+        // O mmas atodo .collect(Collectors.toList()) NUNCA retorna null.
+        return todosOsProdutos.stream()
                 .filter(p -> p.getQuantidadeEmEstoque() < p.getEstoqueMinimo())
                 .collect(Collectors.toList());
     }
