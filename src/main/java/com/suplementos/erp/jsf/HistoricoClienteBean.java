@@ -26,12 +26,10 @@ public class HistoricoClienteBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        // Inicializa os repositórios
         this.clienteRepository = new ClienteRepository();
         this.vendaRepository = new VendaRepository();
     }
 
-    // Este método especial será chamado pelo JSF após o ID do cliente ser recebido da URL
     public void carregarDados() {
         if (clienteId > 0) {
             this.cliente = clienteRepository.buscarPorId(clienteId);

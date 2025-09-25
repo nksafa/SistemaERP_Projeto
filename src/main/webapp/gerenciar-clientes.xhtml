@@ -2,54 +2,59 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-<h:head>
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"> <h:head>
     <title>Gerenciar Clientes</title>
     <h:outputStylesheet name="css/estilo.css" />
 </h:head>
 <h:body>
     <h1>Gerenciar Clientes</h1>
-    <h:messages globalOnly="true" />
+    <p:messages id="messages" globalOnly="true" closable="true"/>
 
     <h:form id="formClientes">
         <h3>Cadastrar / Editar Cliente</h3>
-        <h:panelGrid id="painelCadastro" columns="2">
-            <h:outputLabel value="Nome:" for="nome" />
-            <h:inputText id="nome" value="#{clienteBean.cliente.nome}" required="true" requiredMessage="O nome é obrigatório."/>
+        <p:panelGrid id="painelCadastro" columns="2">
+            <p:outputLabel value="Nome:" for="nome" />
+            <p:inputText id="nome" value="#{clienteBean.cliente.nome}" required="true" requiredMessage="O nome é obrigatório."/>
 
-            <h:outputLabel value="CPF:" for="cpf" />
-            <h:inputText id="cpf" value="#{clienteBean.cliente.cpf}" required="true" requiredMessage="O CPF é obrigatório."/>
-        </h:panelGrid>
+            <p:outputLabel value="CPF:" for="cpf" />
+            <p:inputMask id="cpf" value="#{clienteBean.cliente.cpf}" required="true" requiredMessage="O CPF é obrigatório." mask="999.999.999-99"/>
+        </p:panelGrid>
         <br/>
-        <h:commandButton value="Salvar" action="#{clienteBean.salvar}">
-            <f:ajax execute="@form" render="@form :messages" />
-        </h:commandButton>
+        <p:commandButton value="Salvar" action="#{clienteBean.salvar}" update="@form messages" />
 
         <br/><br/>
         <h3>Lista de Clientes</h3>
-        <h:dataTable id="tabelaClientes" value="#{clienteBean.listaClientes}" var="cli" border="1">
-            <h:column><f:facet name="header">ID</f:facet>#{cli.id}</h:column>
-            <h:column><f:facet name="header">Nome</f:facet>#{cli.nome}</h:column>
-            <h:column><f:facet name="header">CPF</f:facet>#{cli.cpf}</h:column>
-            <h:column>
-                <f:facet name="header">Ações</f:facet>
+        <p:dataTable id="tabelaClientes" value="#{clienteBean.listaClientes}" var="cli"
+                     paginator="true" rows="10" paginatorPosition="bottom"
+                     emptyMessage="Nenhum cliente encontrado.">
 
-                <h:commandButton value="Editar" action="#{clienteBean.editar(cli)}">
-                    <f:ajax render=":formClientes:painelCadastro" />
-                </h:commandButton>
+            <p:column headerText="ID">#{cli.id}</p:column>
+            <p:column headerText="Nome">#{cli.nome}</p:column>
+            <p:column headerText="CPF">#{cli.cpf}</p:column>
 
-                <h:commandButton value="Remover" action="#{clienteBean.remover(cli)}">
-                    <f:ajax render=":formClientes:tabelaClientes" />
-                </h:commandButton>
+            <p:column headerText="Ações">
+                <p:commandButton value="Editar" action="#{clienteBean.editar(cli)}"
+                                 process="@this" update=":formClientes:painelCadastro" icon="pi pi-pencil"
+                                 styleClass="ui-button-raised ui-button-secondary"/>
+                <p:commandButton value="Remover" action="#{clienteBean.remover(cli)}"
+                                 update=":formClientes:tabelaClientes" icon="pi pi-trash"
+                                 styleClass="ui-button-raised ui-button-danger" style="margin-left: 5px;">
+                    <p:confirm header="Confirmação" message="Tem certeza que deseja remover este cliente?" icon="pi pi-exclamation-triangle"/>
+                </p:commandButton>
 
-                <h:button value="Ver Compras" outcome="historico-cliente.xhtml">
+                <p:button value="Ver Compras" outcome="historico-cliente.xhtml">
                     <f:param name="clienteId" value="#{cli.id}"/>
-                </h:button>
-
-            </h:column>
-        </h:dataTable>
+                </p:button>
+            </p:column>
+        </p:dataTable>
     </h:form>
     <br/>
-    <h:button value="Voltar" outcome="dashboard.xhtml" />
+    <p:button value="Voltar" outcome="dashboard.xhtml" />
+
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+    </p:confirmDialog>
 </h:body>
 </html>

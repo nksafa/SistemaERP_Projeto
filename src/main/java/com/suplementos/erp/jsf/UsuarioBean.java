@@ -21,6 +21,8 @@ public class UsuarioBean implements Serializable {
     private Usuario usuario;
     private List<Usuario> listaUsuarios;
     private UsuarioRepository usuarioRepository;
+    private List<Usuario> listaUsuariosFiltrada;
+
 
     @PostConstruct
     public void init() {
@@ -33,14 +35,20 @@ public class UsuarioBean implements Serializable {
         listaUsuarios = usuarioRepository.buscarTodos();
     }
 
+    // Em UsuarioBean.java
+
     public void salvar() {
-        if (usuario.getSenha() == null || usuario.getSenha().trim().isEmpty()) {
+        if (usuario.getCodigo() != 0 && (usuario.getSenha() == null || usuario.getSenha().trim().isEmpty())) {
+
+            Usuario usuarioDoBanco = usuarioRepository.buscarPorId(usuario.getCodigo());
+            usuario.setSenha(usuarioDoBanco.getSenha());
+        } else if (usuario.getCodigo() == 0 && (usuario.getSenha() == null || usuario.getSenha().trim().isEmpty())) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "A senha não pode estar em branco."));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "A senha é obrigatória para novos usuários."));
             return;
         }
 
-        // CORRIGIDO: de getId() para getCodigo()
+
         usuarioRepository.salvar(usuario.getCodigo(), usuario);
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Usuário salvo."));
@@ -51,6 +59,7 @@ public class UsuarioBean implements Serializable {
 
     public void editar(Usuario usuarioSelecionado) {
         this.usuario = usuarioSelecionado;
+        this.usuario.setSenha(null);
     }
 
     public void remover(Usuario usuarioParaRemover) {
@@ -62,7 +71,6 @@ public class UsuarioBean implements Serializable {
             return;
         }
 
-        // CORRIGIDO: de getId() para getCodigo()
         usuarioRepository.remover(usuarioParaRemover.getCodigo());
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Usuário removido."));
@@ -77,12 +85,16 @@ public class UsuarioBean implements Serializable {
     public Usuario getUsuario() {
         return usuario;
     }
-
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-
     public List<Usuario> getListaUsuarios() {
         return listaUsuarios;
+    }
+    public List<Usuario> getListaUsuariosFiltrada() {
+        return listaUsuariosFiltrada;
+    }
+    public void setListaUsuariosFiltrada(List<Usuario> listaUsuariosFiltrada) {
+        this.listaUsuariosFiltrada = listaUsuariosFiltrada;
     }
 }

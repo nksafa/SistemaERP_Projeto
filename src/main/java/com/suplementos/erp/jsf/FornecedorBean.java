@@ -25,8 +25,6 @@ public class FornecedorBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        // AQUI ESTÁ A CORREÇÃO:
-        // A inicialização do repositório deve ser feita aqui
         this.fornecedorRepository = new FornecedorRepository();
         this.fornecedor = new Fornecedor();
         this.listaFornecedores = fornecedorRepository.buscarTodos();
@@ -36,9 +34,10 @@ public class FornecedorBean implements Serializable {
         fornecedorRepository.salvar(fornecedor);
         this.fornecedor = new Fornecedor();
         this.listaFornecedores = fornecedorRepository.buscarTodos();
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Fornecedor salvo."));
     }
 
-    // Dentro da classe FornecedorBean.java
 
     public void desativar(Fornecedor fornecedor) {
         fornecedor.setAtivo(false);

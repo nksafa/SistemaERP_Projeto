@@ -7,6 +7,7 @@ import com.suplementos.erp.repository.ProdutoRepository;
 import com.suplementos.erp.repository.UsuarioRepository;
 import com.suplementos.erp.service.EstoqueService;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -29,7 +30,6 @@ public class LoginBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        // Crie e salve os usuários de teste apenas se a tabela estiver vazia
         List<Usuario> usuarios = usuarioRepository.buscarTodos();
         if (usuarios.isEmpty()) {
             usuarioRepository.salvar(0, new Usuario(0, "admin", "senhaadmin", TipoUsuario.ADMINISTRADOR));
@@ -38,14 +38,11 @@ public class LoginBean implements Serializable {
         }
     }
 
-    // Método que busca os dados
     public void carregarAlertasDeEstoque() {
         EstoqueService estoqueService = new EstoqueService(new ProdutoRepository());
-        // A busca e atribuição agora é a PRIMEIRA E ÚNICA coisa que este método faz.
         this.alertasDeEstoque = estoqueService.getProdutosComEstoqueBaixo();
     }
 
-    // O Getter "inteligente" que garante que os dados sejam carregados
     public List<Produto> getAlertasDeEstoque() {
         carregarAlertasDeEstoque();
         return alertasDeEstoque;
@@ -58,12 +55,11 @@ public class LoginBean implements Serializable {
             this.usuarioLogado = usuario;
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", usuarioLogado);
 
-            // A chamada foi removida daqui, pois o getter agora é responsável por isso.
             return "dashboard?faces-redirect=true";
         } else {
             errorMessage = "Usuário ou senha incorretos.";
             FacesContext.getCurrentInstance().addMessage(null, new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "Erro", "Usuário ou senha incorretos."));
-            return "login?faces-redirect=true";
+            return null;
         }
     }
 

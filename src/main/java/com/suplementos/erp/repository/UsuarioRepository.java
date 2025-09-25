@@ -10,11 +10,9 @@ public class UsuarioRepository implements IRepository<Usuario> {
     private final SessionFactory sessionFactory;
 
     public UsuarioRepository() {
-        // AQUI ESTÁ A MUDANÇA: Usamos a SessionFactory única
         sessionFactory = HibernateUtil.getSessionFactory();
     }
 
-    // Metodo para buscar um usuário pelo nome, usando Hibernate
     public Usuario buscarPorNome(String nome) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("FROM Usuario WHERE nome = :nome", Usuario.class)
@@ -23,7 +21,6 @@ public class UsuarioRepository implements IRepository<Usuario> {
         }
     }
 
-    // Métodos de Persistência com Hibernate (que você já tinha)
     @Override
     public void salvar(int id, Usuario usuario) {
         try (Session session = sessionFactory.openSession()) {

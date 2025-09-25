@@ -1,13 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W_3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-
-<f:metadata>
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> <f:metadata>
     <f:viewParam name="clienteId" value="#{historicoClienteBean.clienteId}" />
-
     <f:viewAction action="#{historicoClienteBean.carregarDados()}" />
 </f:metadata>
 
@@ -16,46 +14,44 @@
     <h:outputStylesheet name="css/estilo.css" />
 </h:head>
 <h:body>
-    <h:panelGroup rendered="#{not empty historicoClienteBean.cliente}">
-        <h1>Histórico de Compras de <h:outputText value="#{historicoClienteBean.cliente.nome}" /></h1>
 
-        <h:dataTable value="#{historicoClienteBean.historicoDeVendas}" var="venda" border="1">
-            <h:column>
-                <f:facet name="header">Data da Venda</f:facet>
+    <p:panel header="Histórico de Compras de #{historicoClienteBean.cliente.nome}"
+             rendered="#{not empty historicoClienteBean.cliente}">
+
+        <p:dataTable value="#{historicoClienteBean.historicoDeVendas}" var="venda"
+                     paginator="true" rows="10" paginatorPosition="bottom"
+                     emptyMessage="Este cliente ainda não realizou nenhuma compra.">
+
+            <p:column headerText="Data da Venda" sortBy="#{venda.dataVenda}" style="width:180px;">
                 <h:outputText value="#{venda.dataVenda}">
                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                 </h:outputText>
-            </h:column>
+            </p:column>
 
-            <h:column>
-                <f:facet name="header">Produtos Comprados</f:facet>
-                <ul>
-                    <ui:repeat value="#{venda.produtosVendidos}" var="produtoNome">
-                        <li>#{produtoNome}</li>
-                    </ui:repeat>
-                </ul>
-            </h:column>
+            <p:column headerText="Produtos Comprados">
+                <p:dataList value="#{venda.produtosVendidos}" var="produtoNome" type="unordered">
+                    <h:outputText value="#{produtoNome}" />
+                </p:dataList>
+            </p:column>
 
-            <h:column>
-                <f:facet name="header">Valor Total</f:facet>
+            <p:column headerText="Valor Total" sortBy="#{venda.valorTotal}" style="width:150px;">
                 <h:outputText value="#{venda.valorTotal}">
                     <f:convertNumber type="currency" currencySymbol="R$ " />
                 </h:outputText>
-            </h:column>
+            </p:column>
 
-            <h:column>
-                <f:facet name="header">Forma de Pagamento</f:facet>
+            <p:column headerText="Forma de Pagamento" style="width:200px;">
                 <h:outputText value="#{venda.formaPagamento}" />
-            </h:column>
-        </h:dataTable>
-    </h:panelGroup>
+            </p:column>
+        </p:dataTable>
+    </p:panel>
 
-    <h:panelGroup rendered="#{empty historicoClienteBean.cliente}">
+    <p:panel header="Erro" rendered="#{empty historicoClienteBean.cliente}">
         <h2>Cliente não encontrado.</h2>
-    </h:panelGroup>
+    </p:panel>
 
     <br/>
-    <h:button value="Voltar para Clientes" outcome="gerenciar-clientes.xhtml" />
+    <p:button value="Voltar para Clientes" outcome="gerenciar-clientes.xhtml" icon="pi pi-arrow-left" />
 
 </h:body>
 </html>

@@ -20,6 +20,7 @@ public class HistoricoComprasBean implements Serializable {
 
     private CompraRepository compraRepository = new CompraRepository();
     private List<Compra> historicoCompras;
+    private List<Compra> historicoFiltrado;
 
     @PostConstruct
     public void init() {
@@ -37,8 +38,13 @@ public class HistoricoComprasBean implements Serializable {
     public List<Compra> getHistoricoCompras() {
         return historicoCompras;
     }
-
     public void setHistoricoCompras(List<Compra> historicoCompras) {
         this.historicoCompras = historicoCompras;
+    }
+    public List<Compra> getHistoricoFiltrado() {
+        return historicoFiltrado;
+    }
+    public void setHistoricoFiltrado(List<Compra> historicoFiltrado) {
+        this.historicoFiltrado = historicoFiltrado;
     }
 }

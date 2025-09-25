@@ -28,20 +28,29 @@ CategoriaBean implements Serializable {
     public void init() {
         this.categoriaRepository = new CategoriaRepository();
         this.categoria = new Categoria();
+        carregarCategorias();
+    }
+    private void carregarCategorias() {
         this.listaCategorias = categoriaRepository.buscarTodos();
     }
 
     public void salvar() {
         categoriaRepository.salvar(categoria);
         this.categoria = new Categoria(); // Reseta o formulário
-        this.listaCategorias = categoriaRepository.buscarTodos(); // Recarrega a lista
+        carregarCategorias();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Categoria salva com sucesso."));
     }
 
     public void remover(Categoria categoria) {
         categoriaRepository.remover(categoria.getId());
-        this.listaCategorias = categoriaRepository.buscarTodos(); // Recarrega a lista
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Categoria removida com sucesso."));
+        carregarCategorias(); // Recarrega a lista
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Categoria removida."));
+    }
+
+    public void editar(Categoria categoriaSelecionada) {
+        // Coloca a categoria clicada na variável do formulário para edição
+        this.categoria = categoriaSelecionada;
     }
 
     // Getters e Setters

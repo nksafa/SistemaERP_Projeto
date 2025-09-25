@@ -10,7 +10,6 @@ public class ProdutoRepository implements IRepository<Produto> {
     private final SessionFactory sessionFactory;
 
     public ProdutoRepository() {
-        // AQUI ESTÁ A MUDANÇA: Usamos a SessionFactory única
         sessionFactory = HibernateUtil.getSessionFactory();
     }
 
@@ -23,11 +22,9 @@ public class ProdutoRepository implements IRepository<Produto> {
         }
     }
 
-    // Este metodo é obrigatório por causa da interface IRepository.
-    // Ele simplesmente chama o metodo salvar correto, que usa o Hibernate.
+
     @Override
     public void salvar(int id, Produto produto) {
-        // A lógica do Hibernate já lida com o ID
         salvar(produto);
     }
 
@@ -38,7 +35,6 @@ public class ProdutoRepository implements IRepository<Produto> {
         }
     }
 
-    // Metodo para buscar o próximo ID (temporário, só para a lógica JSF)
     public int getNextId() {
         try (Session session = sessionFactory.openSession()) {
             List<Produto> produtos = session.createQuery("FROM Produto ORDER BY id DESC", Produto.class)
@@ -66,7 +62,6 @@ public class ProdutoRepository implements IRepository<Produto> {
     @Override
     public List<Produto> buscarTodos() {
         try (Session session = sessionFactory.openSession()) {
-            // AQUI ESTÁ A CORREÇÃO: Filtramos por produtos ativos
             return session.createQuery("FROM Produto WHERE ativo = true", Produto.class).list();
         }
     }

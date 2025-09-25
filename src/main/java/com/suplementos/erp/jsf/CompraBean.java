@@ -12,9 +12,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-
 import java.io.Serializable;
+import java.util.Date; // Import para java.util.Date
 import java.util.List;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @ManagedBean
 @ViewScoped
@@ -22,20 +24,20 @@ public class CompraBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Fornecedor fornecedorAtual;
+    // Atributos para os dados da tela
+    private Integer fornecedorId;
     private int produtoSelecionadoId;
-    private int quantidade;
-    private Integer fornecedorId; // AQUI ESTÁ A CORREÇÃO
+    private int quantidade = 1;
 
+    // Atributos para carregar informações
+    private Fornecedor fornecedorAtual;
+    private List<Produto> produtosDoFornecedor;
+
+    // Repositórios e Serviços
     private ProdutoRepository produtoRepository;
     private CompraRepository compraRepository;
     private EstoqueService estoqueService;
     private FornecedorRepository fornecedorRepository;
-
-    private List<Produto> produtosDoFornecedor;
-    private List<Compra> historicoCompras;
-    private List<Fornecedor> fornecedoresDisponiveis;
-    private double totalDaCompra;
 
     @PostConstruct
     public void init() {
@@ -43,72 +45,62 @@ public class CompraBean implements Serializable {
         this.compraRepository = new CompraRepository();
         this.fornecedorRepository = new FornecedorRepository();
         this.estoqueService = new EstoqueService(produtoRepository);
-        this.fornecedoresDisponiveis = fornecedorRepository.buscarTodos();
     }
 
-    // Dentro da classe CompraBean.java
-// Este método agora é chamado na navegação
-    public void carregarProdutos() {
-        if (fornecedorId != null) {
+    // Mtodo chamado pela página para carregar os dados iniciais
+    public void carregarDadosIniciais() {
+        if (fornecedorId != null && fornecedorId > 0) {
             this.fornecedorAtual = fornecedorRepository.buscarPorId(fornecedorId);
             this.produtosDoFornecedor = produtoRepository.buscarPorFornecedor(fornecedorId);
         }
     }
 
-    public void realizarCompra() {
-        Produto produtoSelecionado = produtoRepository.buscarPorId(produtoSelecionadoId);
-        if (produtoSelecionado != null && quantidade > 0) {
-            // Adiciona a lógica para calcular e exibir o valor total
-            this.totalDaCompra = produtoSelecionado.getPrecoCusto() * quantidade;
-
-            Compra novaCompra = new Compra(new java.util.Date(), quantidade, produtoSelecionado.getPrecoCusto(), fornecedorAtual, produtoSelecionado);
-            compraRepository.salvar(novaCompra);
-
-            // Atualiza o estoque
-            estoqueService.atualizarEstoque(produtoSelecionado.getId(), quantidade);
-
-            // Exibe uma mensagem de sucesso
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Compra realizada com sucesso!", null));
-
-            // Reseta o formulário
-            this.quantidade = 0;
-            this.produtoSelecionadoId = 0;
-        }
-    }
-
-    public void calcularTotal() {
-        // Este método será chamado pelo AJAX
-        Produto produtoSelecionado = produtoRepository.buscarPorId(produtoSelecionadoId);
-        if (produtoSelecionado != null) {
-            this.totalDaCompra = produtoSelecionado.getPrecoCusto() * quantidade;
-        }
-    }
-    public double getPrecoCustoProdutoSelecionado() {
-        Produto produto = produtoRepository.buscarPorId(produtoSelecionadoId);
-        if (produto != null) {
-            return produto.getPrecoCusto();
+    // Getter que calcula o total sob demanda
+    public double getTotalDaCompra() {
+        if (produtoSelecionadoId > 0 && quantidade > 0 && produtosDoFornecedor != null) {
+            // Encontra o produto selecionado na lista para pegar seu preço de custo
+            return produtosDoFornecedor.stream()
+                    .filter(p -> p.getId() == produtoSelecionadoId)
+                    .findFirst()
+                    .map(produto -> produto.getPrecoCusto() * quantidade) // Calcula o total
+                    .orElse(0.0); // Retorna 0.0 se não encontrar o produto
         }
         return 0.0;
     }
 
-    // Getters e Setters
+    public void realizarCompra() {
+        Produto produtoSelecionado = produtoRepository.buscarPorId(produtoSelecionadoId);
+
+        if (produtoSelecionado != null && quantidade > 0) {
+            double totalDaCompra = getTotalDaCompra(); // Usa o getter para pegar o total calculado
+
+
+            Date dataCorreta = Date.from(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")).toInstant());
+
+            Compra novaCompra = new Compra(dataCorreta, quantidade, produtoSelecionado.getPrecoCusto(), fornecedorAtual, produtoSelecionado);            compraRepository.salvar(novaCompra);
+
+            // Atualiza o estoque
+            estoqueService.atualizarEstoque(produtoSelecionado.getId(), quantidade);
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Compra de R$ " + String.format("%.2f", totalDaCompra) + " realizada."));
+
+            // Reseta o formulário
+            this.quantidade = 1;
+            this.produtoSelecionadoId = 0;
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Selecione um produto e uma quantidade válida."));
+        }
+    }
+
+    // Getters e Setters necessários para a página
+    public Integer getFornecedorId() { return fornecedorId; }
+    public void setFornecedorId(Integer fornecedorId) { this.fornecedorId = fornecedorId; }
     public Fornecedor getFornecedorAtual() { return fornecedorAtual; }
-    public void setFornecedorAtual(Fornecedor fornecedorAtual) { this.fornecedorAtual = fornecedorAtual; }
+    public List<Produto> getProdutosDoFornecedor() { return produtosDoFornecedor; }
     public int getProdutoSelecionadoId() { return produtoSelecionadoId; }
     public void setProdutoSelecionadoId(int produtoSelecionadoId) { this.produtoSelecionadoId = produtoSelecionadoId; }
     public int getQuantidade() { return quantidade; }
     public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
-    public List<Produto> getProdutosDoFornecedor() { return produtosDoFornecedor; }
-    public List<Compra> getHistoricoCompras() { return historicoCompras; }
-    public void setHistoricoCompras(List<Compra> historicoCompras) { this.historicoCompras = historicoCompras; }
-    public Integer getFornecedorId() { return fornecedorId; }
-    public void setFornecedorId(Integer fornecedorId) { this.fornecedorId = fornecedorId; }
-    public List<Fornecedor> getFornecedoresDisponiveis() { return fornecedoresDisponiveis; }
-    public void setFornecedoresDisponiveis(List<Fornecedor> fornecedoresDisponiveis) { this.fornecedoresDisponiveis = fornecedoresDisponiveis; }
-    public double getTotalDaCompra() {
-        return totalDaCompra;
-    }
-    public void setTotalDaCompra(double totalDaCompra) {
-        this.totalDaCompra = totalDaCompra;
-    }
 }

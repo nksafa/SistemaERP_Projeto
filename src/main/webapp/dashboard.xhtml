@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
     <title>Dashboard - ERP Suplementos</title>
@@ -11,42 +12,54 @@
 </h:head>
 
 <h:body>
-    <h1>Bem-vindo, <h:outputText value="#{loginBean.usuarioLogado.nome}" />!</h1>
+    <div class="card">
+        <p:toolbar>
+            <p:toolbarGroup>
+                <span style="font-weight: bold; font-size: 1.5em;">ERP Suplementos</span>
+            </p:toolbarGroup>
 
-    <h:panelGroup rendered="#{not empty loginBean.alertasDeEstoque}">
-        <div class="alerta-estoque">
-            <h3>⚠️ Atenção: Estoque Baixo!</h3>
-            <p>Os seguintes produtos estão abaixo do estoque mínimo:</p>
-            <ul>
-                <ui:repeat value="#{loginBean.alertasDeEstoque}" var="produto">
-                    <li>
-                        <h:outputText value="#{produto.nome} (Estoque atual: #{produto.quantidadeEmEstoque} / Mínimo necessário: #{produto.estoqueMinimo})" />
-                    </li>
-                </ui:repeat>
-            </ul>
-        </div>
-    </h:panelGroup>
+            <p:toolbarGroup align="right">
+                <span style="margin-right: 15px;">
+                    Bem-vindo, <h:outputText value="#{loginBean.usuarioLogado.nome}" />!
+                </span>
+                <p:button value="Sair" outcome="login.xhtml?faces-redirect=true" icon="pi pi-sign-out" styleClass="ui-button-danger" />
+            </p:toolbarGroup>
+        </p:toolbar>
 
-    <h3>Menu Principal</h3>
+        <br/>
 
-    <h:button value="Realizar Venda" outcome="realizar-venda.xhtml" />
-    <h:button value="Gerenciar Clientes" outcome="gerenciar-clientes.xhtml" />
-    <h:button value="Gerenciar Vendas" outcome="gerenciar-vendas.xhtml" />
+        <h:panelGroup rendered="#{not empty loginBean.alertasDeEstoque}">
+            <p:panel header="⚠️ Atenção: Estoque Baixo!" toggleable="true" styleClass="ui-panel-warning">
+                <p>Os seguintes produtos estão abaixo do estoque mínimo:</p>
+                <ul>
+                    <ui:repeat value="#{loginBean.alertasDeEstoque}" var="produto">
+                        <li>
+                            <h:outputText value="#{produto.nome} (Estoque atual: #{produto.quantidadeEmEstoque} / Mínimo necessário: #{produto.estoqueMinimo})" />
+                        </li>
+                    </ui:repeat>
+                </ul>
+            </p:panel>
+        </h:panelGroup>
 
-    <br/>
+        <p:panel header="Menu Principal">
+            <h:panelGrid columns="4" cellpadding="10">
+                <p:button value="Realizar Venda" outcome="realizar-venda.xhtml" icon="pi pi-shopping-cart" />
+                <p:button value="Gerenciar Clientes" outcome="gerenciar-clientes.xhtml" icon="pi pi-users" />
+                <p:button value="Gerenciar Vendas" outcome="gerenciar-vendas.xhtml" icon="pi pi-list" />
 
-    <h:panelGroup rendered="#{loginBean.usuarioLogado.tipo eq 'GERENTE' or loginBean.usuarioLogado.tipo eq 'ADMINISTRADOR'}">
-        <h:button value="Gerenciar Produtos" outcome="gerenciar-produtos.xhtml" />
-        <h:button value="Gerenciar Fornecedores e Compras" outcome="gerenciar-fornecedores.xhtml" />
-        <h:button value="Gerenciar Categorias" outcome="gerenciar-categorias.xhtml" />
-    </h:panelGroup>
+                <p:button value="Gerenciar Produtos" outcome="gerenciar-produtos.xhtml" icon="pi pi-box"
+                          rendered="#{loginBean.usuarioLogado.tipo eq 'GERENTE' or loginBean.usuarioLogado.tipo eq 'ADMINISTRADOR'}" />
 
-    <h:panelGroup rendered="#{loginBean.usuarioLogado.tipo eq 'ADMINISTRADOR'}">
-        <h:button value="Gerenciar Usuários" outcome="gerenciar-usuarios.xhtml" />
-    </h:panelGroup>
+                <p:button value="Gerenciar Fornecedores" outcome="gerenciar-fornecedores.xhtml" icon="pi pi-truck"
+                          rendered="#{loginBean.usuarioLogado.tipo eq 'GERENTE' or loginBean.usuarioLogado.tipo eq 'ADMINISTRADOR'}" />
 
-    <br/><br/>
-    <h:button value="Sair" outcome="login.xhtml?faces-redirect=true" />
+                <p:button value="Gerenciar Categorias" outcome="gerenciar-categorias.xhtml" icon="pi pi-tags"
+                          rendered="#{loginBean.usuarioLogado.tipo eq 'GERENTE' or loginBean.usuarioLogado.tipo eq 'ADMINISTRADOR'}" />
 
+                <p:button value="Gerenciar Usuários" outcome="gerenciar-usuarios.xhtml" icon="pi pi-user-edit"
+                          rendered="#{loginBean.usuarioLogado.tipo eq 'ADMINISTRADOR'}" />
+            </h:panelGrid>
+        </p:panel>
+    </div>
 </h:body>
 </html>

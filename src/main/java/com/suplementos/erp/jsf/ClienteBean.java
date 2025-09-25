@@ -30,7 +30,6 @@ public class ClienteBean implements Serializable {
     public void salvar() {
         clienteRepository.salvar(cliente);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Cliente salvo com sucesso."));
-        // Limpa o formulário e recarrega a lista
         cliente = new Cliente();
         listaClientes = clienteRepository.buscarTodos();
     }
@@ -42,7 +41,6 @@ public class ClienteBean implements Serializable {
     public void remover(Cliente clienteParaRemover) {
         clienteRepository.remover(clienteParaRemover);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Cliente removido."));
-        // Recarrega a lista
         listaClientes = clienteRepository.buscarTodos();
     }
 

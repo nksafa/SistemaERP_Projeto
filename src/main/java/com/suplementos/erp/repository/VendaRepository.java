@@ -39,7 +39,6 @@ public class VendaRepository implements IRepository<Venda> {
 
     public List<Venda> buscarPorClienteId(int clienteId) {
         try (Session session = sessionFactory.openSession()) {
-            // Usamos HQL para buscar as Vendas onde o ID do cliente associado corresponde ao parâmetro
             return session.createQuery("FROM Venda v WHERE v.cliente.id = :clienteId", Venda.class)
                     .setParameter("clienteId", clienteId)
                     .list();

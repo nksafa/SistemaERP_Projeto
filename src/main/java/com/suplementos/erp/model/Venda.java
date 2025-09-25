@@ -31,20 +31,22 @@ public class Venda implements Serializable {
     @Enumerated(EnumType.STRING)
     private FormaPagamento formaPagamento;
 
+    private Integer numeroParcelas;
+
     public Venda() {}
 
     // Construtor completo e corrigido
-    public Venda(int id, Date dataVenda, Cliente cliente, Usuario funcionario, List<Produto> produtos, double valorTotal, FormaPagamento formaPagamento) {
+    public Venda(int id, Date dataVenda, Cliente cliente, Usuario funcionario, List<Produto> produtos, double valorTotal, FormaPagamento formaPagamento, Integer numeroParcelas) {
         this.id = id;
         this.dataVenda = dataVenda;
         this.cliente = cliente;
         this.funcionario = funcionario;
-        // AQUI ESTÁ A CORREÇÃO: Usamos um stream para converter a lista de Produtos em uma lista de nomes
         this.produtosVendidos = produtos.stream()
                 .map(Produto::getNome)
                 .collect(Collectors.toList());
         this.valorTotal = valorTotal;
         this.formaPagamento = formaPagamento;
+        this.numeroParcelas = numeroParcelas;
     }
 
     // Outros getters e setters
@@ -102,5 +104,13 @@ public class Venda implements Serializable {
 
     public void setFormaPagamento(FormaPagamento formaPagamento) {
         this.formaPagamento = formaPagamento;
+    }
+
+    public Integer getNumeroParcelas() {
+        return numeroParcelas;
+    }
+
+    public void setNumeroParcelas(Integer numeroParcelas) {
+        this.numeroParcelas = numeroParcelas;
     }
 }

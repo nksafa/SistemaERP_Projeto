@@ -17,12 +17,10 @@ public class IndexBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String mensagem = "Bem-vindo ao sistema ERP da sua loja de suplementos!";
 
-    // Getter para a variável 'mensagem'
     public String getMensagem() {
         return mensagem;
     }
 
-    // Setter para a variável 'mensagem'
     public void setMensagem(String mensagem) {
         this.mensagem = mensagem;
     }

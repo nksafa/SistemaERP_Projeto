@@ -21,6 +21,8 @@ public class HistoricoVendasBean implements Serializable {
 
     private final VendasService vendasService;
     private List<Venda> historicoVendas;
+    private List<Venda> historicoFiltrado;
+
 
     // Inicialização do Bean
     public HistoricoVendasBean() {
@@ -41,11 +43,21 @@ public class HistoricoVendasBean implements Serializable {
     public void setHistoricoVendas(List<Venda> historicoVendas) {
         this.historicoVendas = historicoVendas;
     }
-    public void removerVenda(int idVenda) {
-        vendasService.removerVenda(idVenda);
+
+    public void removerVenda(Venda vendaParaRemover) {
+
+        vendasService.removerVenda(vendaParaRemover.getId());
+
         this.historicoVendas = vendasService.listarHistoricoVendas(); // Recarrega a lista
 
-        // Adiciona uma mensagem de sucesso
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Venda removida com sucesso."));
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Venda #" + vendaParaRemover.getId() + " removida com sucesso."));
+    }
+
+    public List<Venda> getHistoricoFiltrado() {
+        return historicoFiltrado;
+    }
+    public void setHistoricoFiltrado(List<Venda> historicoFiltrado) {
+        this.historicoFiltrado = historicoFiltrado;
     }
 }
