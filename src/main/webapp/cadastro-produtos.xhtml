@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"> <h:head>
+    <title>
+        <h:outputText value="Cadastro de Produtos" rendered="#{empty produtoBean.produto.id}" />
+        <h:outputText value="Editando Produto" rendered="#{not empty produtoBean.produto.id}" />
+    </title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+
+    <p:growl id="messages" globalOnly="true" />
+
+    <h:form id="formProduto">
+        <p:panel header="#{empty produtoBean.produto.id ? 'Cadastrar Novo Produto' : 'Editando Produto'}">
+
+            <p:panelGrid columns="2" styleClass="ui-noborder">
+
+                <p:outputLabel for="nome" value="Nome:" />
+                <p:inputText id="nome" value="#{produtoBean.produto.nome}" required="true" />
+
+                <p:outputLabel for="descricao" value="Descrição:" />
+                <p:inputTextarea id="descricao" value="#{produtoBean.produto.descricao}" rows="4" />
+
+                <p:outputLabel for="preco" value="Preço:" />
+                <p:inputNumber id="preco" value="#{produtoBean.produto.preco}" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." />
+
+                <p:outputLabel for="precoCusto" value="Preço de Custo:" />
+                <p:inputNumber id="precoCusto" value="#{produtoBean.produto.precoCusto}" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." />
+
+                <p:outputLabel for="estoque" value="Estoque:" />
+                <p:inputNumber id="estoque" value="#{produtoBean.produto.quantidadeEmEstoque}" decimalPlaces="0" />
+
+                <p:outputLabel for="estoqueMinimo" value="Estoque Mínimo:" />
+                <p:inputNumber id="estoqueMinimo" value="#{produtoBean.produto.estoqueMinimo}" decimalPlaces="0" />
+
+                <p:outputLabel for="categoria" value="Categoria:" />
+                <p:selectOneMenu id="categoria" value="#{produtoBean.categoriaId}" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemLabel="Selecione uma categoria" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{produtoBean.categoriasDisponiveis}" var="cat" itemLabel="#{cat.nome}" itemValue="#{cat.id}" />
+                </p:selectOneMenu>
+
+                <p:outputLabel for="fornecedor" value="Fornecedor:" />
+                <p:selectOneMenu id="fornecedor" value="#{produtoBean.fornecedorId}" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemLabel="Selecione um fornecedor" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{produtoBean.fornecedoresDisponiveis}" var="forn" itemLabel="#{forn.nome}" itemValue="#{forn.id}" />
+                </p:selectOneMenu>
+
+            </p:panelGrid>
+
+            <br/>
+            <p:commandButton value="Salvar" action="#{produtoBean.salvar}" update="@form :messages" />
+            <p:button value="Voltar" outcome="gerenciar-produtos.xhtml" style="margin-left: 10px;" />
+
+        </p:panel>
+    </h:form>
+
+</h:body>
+</html>

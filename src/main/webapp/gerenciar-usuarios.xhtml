@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Gerenciar Usuários</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+    <p:growl id="messages" globalOnly="true" />
+
+    <p:panel header="Gerenciamento de Usuários">
+        <h:form id="formUsuarios">
+
+            <h3>Cadastrar / Editar Usuário</h3>
+
+            <p:panelGrid id="painelCadastro" columns="2" styleClass="ui-noborder">
+
+                <p:outputLabel for="nome" value="Nome de Usuário:" />
+                <p:inputText id="nome" value="#{usuarioBean.usuario.nome}" required="true" />
+
+                <p:outputLabel for="senha" value="Senha:" />
+                <p:password id="senha" value="#{usuarioBean.usuario.senha}"
+                            required="#{empty usuarioBean.usuario.codigo}"
+                            feedback="false" autocomplete="new-password" />
+
+                <p:outputLabel for="tipo" value="Tipo de Usuário:" />
+                <p:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo}" required="true">
+                    <f:selectItem itemLabel="Selecione um tipo" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{usuarioBean.tiposDeUsuario}" />
+                </p:selectOneMenu>
+            </p:panelGrid>
+
+            <br/>
+
+            <p:commandButton value="Salvar" action="#{usuarioBean.salvar}"
+                             update="painelCadastro tabelaUsuarios :messages" />
+
+            <br/><br/>
+
+            <h3>Lista de Usuários</h3>
+            <p:dataTable id="tabelaUsuarios" value="#{usuarioBean.listaUsuarios}" var="user"
+                         paginator="true" rows="10" emptyMessage="Nenhum usuário encontrado."
+                         rowKey="#{user.codigo}">
+
+                <p:column headerText="ID" sortBy="#{user.codigo}" style="width:100px;">
+                    <h:outputText value="#{user.codigo}" />
+                </p:column>
+
+                <p:column headerText="Nome" sortBy="#{user.nome}">
+                    <h:outputText value="#{user.nome}" />
+                </p:column>
+
+                <p:column headerText="Tipo" sortBy="#{user.tipo}">
+                    <h:outputText value="#{user.tipo}" />
+                </p:column>
+
+                <p:column headerText="Ações" style="width:200px; text-align: center;">
+                    <p:commandButton title="Editar" action="#{usuarioBean.editar(user)}"
+                                     process="@this" update=":formUsuarios:painelCadastro"
+                                     icon="pi pi-pencil" styleClass="rounded-button ui-button-danger ui-button-outlined"/>
+
+                    <p:commandButton value="Remover" action="#{usuarioBean.remover(user)}"
+                                     update=":formUsuarios:tabelaUsuarios" icon="pi pi-trash"
+                                     styleClass="rounded-button ui-button-danger ui-button-outlined">
+                        <p:confirm header="Confirmação" message="Tem certeza que deseja remover este usuário?" icon="pi pi-exclamation-triangle"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:panel>
+    <br/>
+    <p:button value="Voltar" outcome="dashboard.xhtml" icon="pi pi-arrow-left"/>
+
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+    </p:confirmDialog>
+</h:body>
+</html>

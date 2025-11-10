@@ -1,0 +1,40 @@
+body {
+    background-color: #f0f8ff; /* Cor de fundo azul claro */
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #2c3e50; /* Cor do texto do cabeçalho */
+}
+
+tr.estoque-baixo td {
+    color: #B71C1C !important; /* Um vermelho mais escuro e legível */
+    font-weight: bold !important;
+    background-color: #ffebee !important;
+}
+
+.alerta-estoque {
+    border: 2px solid #ffb300; /* Laranja/Amarelo escuro */
+    background-color: #fff8e1; /* Amarelo bem claro */
+    color: #4e4e4e;
+    padding: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.alerta-estoque h3 {
+    margin-top: 0;
+    color: #c62828; /* Vermelho escuro */
+}
+
+.alerta-estoque ul {
+    margin-bottom: 0;
+    padding-left: 20px;
+}
+.login-panel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh; /* Ocupa 80% da altura da tela */
+}

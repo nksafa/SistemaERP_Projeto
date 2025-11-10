@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"> <h:head>
+    <title>Realizar Venda</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+    <p:growl id="messages" globalOnly="true" />
+
+    <h1>Realizar Venda</h1>
+
+    <h:form id="formVenda">
+        <p:panelGrid columns="2" layout="grid" style="width: 100%;"
+                     columnClasses="ui-grid-col-7, ui-grid-col-5">
+
+            <p:panel header="Produtos Disponíveis">
+                <p:dataTable id="tabelaProdutos" value="#{vendaBean.produtosDisponiveis}" var="p"
+                             paginator="true" rows="8" filteredValue="#{vendaBean.produtosFiltrados}"
+                             emptyMessage="Nenhum produto encontrado.">
+
+                    <p:column headerText="Nome" filterBy="#{p.nome}" filterMatchMode="contains">
+                        <h:outputText value="#{p.nome}" />
+                    </p:column>
+
+                    <p:column headerText="Preço" style="width:120px;">
+                        <h:outputText value="#{p.preco}">
+                            <f:convertNumber type="currency" currencySymbol="R$ " />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="width:120px; text-align: center;">
+                        <p:commandButton value="Adicionar" action="#{vendaBean.adicionarAoCarrinho(p)}"
+                                         update=":formVenda:tabelaCarrinho :formVenda:painelTotal"
+                                         icon="pi pi-plus" />
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+
+            <p:panel header="Resumo da Venda">
+
+                <h4>Carrinho</h4>
+                <p:dataTable id="tabelaCarrinho" value="#{vendaBean.carrinho}" var="c"
+                             emptyMessage="O carrinho está vazio.">
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{c.nome}" />
+                    </p:column>
+                    <p:column headerText="Preço" style="width:100px;">
+                        <h:outputText value="#{c.preco}">
+                            <f:convertNumber type="currency" currencySymbol="R$ " />
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:50px;">
+                        <p:commandButton action="#{vendaBean.removerDoCarrinho(c)}"
+                                         update=":formVenda:tabelaCarrinho :formVenda:painelTotal"
+                                         icon="pi pi-times" styleClass="ui-button-danger rounded-button"/>
+                    </p:column>
+                </p:dataTable>
+
+                <p:panelGrid id="painelTotal" columns="1" style="width:100%; margin-top: 15px;">
+                    <h:outputText value="Total: R$ #{vendaBean.valorTotal}"
+                                  style="font-weight: bold; font-size: 1.5em;" />
+                </p:panelGrid>
+
+                <p:panel header="Cliente" style="margin-top: 15px;">
+                    <p:selectOneMenu value="#{vendaBean.clienteId}" filter="true" filterMatchMode="contains">
+                        <f:selectItem itemLabel="Venda sem cadastro" itemValue="0" />
+                        <f:selectItems value="#{vendaBean.clientesDisponiveis}" var="cli"
+                                       itemLabel="#{cli.nome} - #{cli.cpf}" itemValue="#{cli.id}" />
+                    </p:selectOneMenu>
+                    <p:button value="Novo Cliente" outcome="gerenciar-clientes.xhtml" style="margin-left: 10px;" styleClass="ui-button-secondary"/>
+                </p:panel>
+
+                <p:panel header="Forma de Pagamento" style="margin-top: 15px;">
+                    <p:selectOneRadio value="#{vendaBean.formaPagamento}">
+                        <f:selectItems value="#{vendaBean.formasPagamento}" var="fp" itemLabel="#{fp.name()}" itemValue="#{fp}"/>
+                        <p:ajax update="painelParcelas"/>
+                    </p:selectOneRadio>
+
+                    <p:panelGrid id="painelParcelas" columns="2" style="margin-top: 10px;">
+                        <p:outputLabel for="parcelas" value="Nº de Parcelas:" rendered="#{vendaBean.formaPagamento.name() eq 'CREDITO'}" />
+                        <p:selectOneMenu id="parcelas" value="#{vendaBean.numeroParcelas}" rendered="#{vendaBean.formaPagamento.name() eq 'CREDITO'}">
+                            <f:selectItem itemLabel="Selecione..." itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItems value="#{vendaBean.parcelasDisponiveis}" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                </p:panel>
+
+                <br/>
+                <p:commandButton value="Finalizar Venda" action="#{vendaBean.finalizarVenda}"
+                                 update="@form :messages" icon="pi pi-check" style="width: 100%;"
+                                 styleClass="ui-button-success" />
+            </p:panel>
+
+        </p:panelGrid>
+    </h:form>
+
+    <br/><br/>
+    <p:button value="Voltar" outcome="gerenciar-vendas.xhtml" icon="pi pi-arrow-left" />
+
+</h:body>
+</html>

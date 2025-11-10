@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"> <h:head>
+    <title>Gerenciar Produtos</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+
+<h:body>
+    <p:growl id="messages" globalOnly="true" />
+
+    <h:form id="formProdutos">
+        <p:panel header="Gerenciamento de Produtos">
+
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:button value="Cadastrar Novo Produto" outcome="cadastro-produtos.xhtml" icon="pi pi-plus" />
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <br/>
+
+            <p:dataTable id="tabelaProdutos" value="#{produtoBean.listaProdutos}" var="prod"
+                         paginator="true" rows="10" paginatorPosition="bottom"
+                         filteredValue="#{produtoBean.listaProdutosFiltrada}"
+                         emptyMessage="Nenhum produto encontrado."
+                         rowStyleClass="#{prod.quantidadeEmEstoque lt prod.estoqueMinimo ? 'estoque-baixo' : null}">
+
+                <p:column headerText="ID" sortBy="#{prod.id}" filterBy="#{prod.id}" filterMatchMode="contains" style="width:100px;">
+                    <h:outputText value="#{prod.id}" />
+                </p:column>
+
+                <p:column headerText="Nome" sortBy="#{prod.nome}" filterBy="#{prod.nome}" filterMatchMode="contains">
+                    <h:outputText value="#{prod.nome}" />
+                </p:column>
+
+                <p:column headerText="Preço" sortBy="#{prod.preco}">
+                    <h:outputText value="#{prod.preco}">
+                        <f:convertNumber type="currency" currencySymbol="R$ "/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Estoque / Mínimo" sortBy="#{prod.quantidadeEmEstoque}">
+                    <h:outputText value="#{prod.quantidadeEmEstoque} / #{prod.estoqueMinimo}" />
+                </p:column>
+
+                <p:column headerText="Ações" style="width:200px; text-align: center;">
+                    <p:commandButton title="Editar" action="#{produtoBean.editar(prod)}" ajax="false"
+                                     icon="pi pi-pencil"
+                                     styleClass="rounded-button ui-button-secondary ui-button-outlined"/>
+
+                    <p:commandButton title="Desativar" action="#{produtoBean.desativar(prod)}"
+                                     update="tabelaProdutos" icon="pi pi-power-off"
+                                     styleClass="rounded-button ui-button-secondary ui-button-outlined">
+                        <p:confirm header="Confirmação" message="Tem certeza que deseja desativar este produto?" icon="pi pi-exclamation-triangle"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </h:form>
+    <br/>
+    <p:button value="Voltar para o Dashboard" outcome="dashboard.xhtml" icon="pi pi-arrow-left"/>
+
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+    </p:confirmDialog>
+
+</h:body>
+</html>

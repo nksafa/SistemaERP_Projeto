@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Logs de Auditoria</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+    <p:panel header="Logs de Auditoria do Sistema">
+        <p:dataTable value="#{auditLogBean.logs}" var="log" paginator="true" rows="20"
+                     emptyMessage="Nenhum registro de log encontrado.">
+
+            <p:column headerText="Data/Hora" sortBy="#{log.dataHora}" style="width: 180px;">
+                <h:outputText value="#{log.dataHora}">
+                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                </h:outputText>
+            </p:column>
+
+            <p:column headerText="Usuário" filterBy="#{log.usuarioResponsavel}" filterMatchMode="contains">
+                <h:outputText value="#{log.usuarioResponsavel}" />
+            </p:column>
+
+            <p:column headerText="Ação" filterBy="#{log.acao}" filterMatchMode="exact" style="width: 120px;">
+                <f:facet name="filter">
+                    <p:selectOneMenu onchange="PF('tabelaLogs').filter()" styleClass="custom-filter">
+                        <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItem itemLabel="CRIAR" itemValue="CRIAR" />
+                        <f:selectItem itemLabel="EDITAR" itemValue="EDITAR" />
+                        <f:selectItem itemLabel="REMOVER" itemValue="REMOVER" />
+                        <f:selectItem itemLabel="DESATIVAR" itemValue="DESATIVAR" />
+                    </p:selectOneMenu>
+                </f:facet>
+                <span class="customer-badge status-#{log.acao.toLowerCase()}">#{log.acao}</span>
+            </p:column>
+
+            <p:column headerText="Entidade" filterBy="#{log.entidade}" filterMatchMode="contains" style="width: 150px;">
+                <h:outputText value="#{log.entidade}" />
+            </p:column>
+
+            <p:column headerText="Detalhes" filterBy="#{log.detalhes}" filterMatchMode="contains">
+                <h:outputText value="#{log.detalhes}" />
+            </p:column>
+        </p:dataTable>
+    </p:panel>
+    <br/>
+    <p:button value="Voltar" outcome="dashboard.xhtml" icon="pi pi-arrow-left" styleClass="rounded-button ui-button-secondary"/>
+</h:body>
+</html>

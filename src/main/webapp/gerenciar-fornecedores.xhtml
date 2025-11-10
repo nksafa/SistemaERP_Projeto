@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Gerenciar Fornecedores</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+    <p:growl id="messages" globalOnly="true"/>
+
+    <p:panel header="Gerenciamento de Fornecedores">
+        <h:form id="formFornecedores">
+
+            <h3>Cadastrar / Editar Fornecedor</h3>
+
+            <p:panelGrid id="painelCadastro" columns="2" styleClass="ui-noborder">
+                <p:outputLabel for="nome" value="Nome:" />
+                <p:inputText id="nome" value="#{fornecedorBean.fornecedor.nome}" required="true" requiredMessage="O nome é obrigatório."/>
+
+                <p:outputLabel for="contato" value="Contato (Telefone/Email):" />
+                <p:inputText id="contato" value="#{fornecedorBean.fornecedor.contato}" />
+            </p:panelGrid>
+
+            <br/>
+
+            <p:commandButton value="Salvar" action="#{fornecedorBean.salvar}"
+                             update="painelCadastro tabelaFornecedores :messages" />
+
+            <br/><br/>
+
+            <h3>Lista de Fornecedores</h3>
+            <p:dataTable id="tabelaFornecedores" value="#{fornecedorBean.listaFornecedores}" var="forn"
+                         paginator="true" rows="10" paginatorPosition="bottom"
+                         emptyMessage="Nenhum fornecedor encontrado.">
+
+                <p:column headerText="ID" sortBy="#{forn.id}" style="width:100px;">
+                    <h:outputText value="#{forn.id}" />
+                </p:column>
+
+                <p:column headerText="Nome" sortBy="#{forn.nome}">
+                    <h:outputText value="#{forn.nome}" />
+                </p:column>
+
+                <p:column headerText="Contato" sortBy="#{forn.contato}">
+                    <h:outputText value="#{forn.contato}" />
+                </p:column>
+
+                <p:column headerText="Ações" style="width:300px; text-align: center;">
+
+                    <p:button icon="pi pi-shopping-cart" title="Realizar Compra"
+                              outcome="realizar-compra.xhtml"
+                              styleClass="rounded-button ui-button-success ui-button-outlined">
+                        <f:param name="fornecedorId" value="#{forn.id}"/>
+                    </p:button>
+
+                    <p:commandButton title="Editar" action="#{fornecedorBean.editar(forn)}"
+                                     process="@this" update=":formFornecedores:painelCadastro" icon="pi pi-pencil"
+                                     styleClass="rounded-button ui-button-secondary ui-button-outlined"/>
+
+                    <p:commandButton title="Desativar" action="#{fornecedorBean.desativar(forn)}"
+                                     update="tabelaFornecedores" icon="pi pi-times-circle"
+                                     styleClass="rounded-button ui-button-help ui-button-outlined">
+                        <p:confirm header="Confirmação" message="Tem certeza que deseja desativar este fornecedor?" icon="pi pi-exclamation-triangle"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:panel>
+    <br/>
+    <p:button value="Voltar" outcome="dashboard.xhtml" icon="pi pi-arrow-left"/>
+    <p:button value="Histórico de Compras" outcome="historico-compras.xhtml" icon="pi pi-history" style="margin-left: 5px;"/>
+
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+    </p:confirmDialog>
+</h:body>
+</html>

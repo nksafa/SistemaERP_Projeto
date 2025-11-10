@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"> <h:head>
+    <title>Lista de Produtos</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+    <h:form>
+        <p:panel header="Consulta de Produtos em Estoque">
+
+            <p:dataTable id="tabelaProdutos" value="#{produtoBean.listaProdutos}" var="prod"
+                         paginator="true" rows="15" paginatorPosition="bottom"
+                         filteredValue="#{produtoBean.listaProdutosFiltrada}"
+                         emptyMessage="Nenhum produto encontrado."
+                         rowStyleClass="#{prod.quantidadeEmEstoque lt prod.estoqueMinimo ? 'estoque-baixo' : null}">
+
+                <p:column headerText="ID" sortBy="#{prod.id}" filterBy="#{prod.id}" style="width:80px;">
+                    <h:outputText value="#{prod.id}" />
+                </p:column>
+
+                <p:column headerText="Nome" sortBy="#{prod.nome}" filterBy="#{prod.nome}" filterMatchMode="contains">
+                    <h:outputText value="#{prod.nome}" />
+                </p:column>
+
+                <p:column headerText="Descrição">
+                    <h:outputText value="#{prod.descricao}" />
+                </p:column>
+
+                <p:column headerText="Categoria" sortBy="#{prod.categoria.nome}" filterBy="#{prod.categoria.nome}" filterMatchMode="contains">
+                    <h:outputText value="#{prod.categoria.nome}" />
+                </p:column>
+
+                <p:column headerText="Preço" sortBy="#{prod.preco}">
+                    <h:outputText value="#{prod.preco}">
+                        <f:convertNumber type="currency" currencySymbol="R$ "/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Estoque" sortBy="#{prod.quantidadeEmEstoque}" style="width:100px;">
+                    <h:outputText value="#{prod.quantidadeEmEstoque}" />
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </h:form>
+
+    <br/>
+    <p:button value="Voltar para o Dashboard" outcome="dashboard.xhtml" icon="pi pi-arrow-left"/>
+
+</h:body>
+</html>

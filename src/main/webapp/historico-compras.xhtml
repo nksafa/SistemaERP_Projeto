@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"> <h:head>
+    <title>Histórico de Compras</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+    <p:growl id="messages" globalOnly="true" />
+
+    <h:form id="formHistorico">
+        <p:panel header="Histórico de Compras">
+
+            <p:dataTable id="tabelaCompras" value="#{historicoComprasBean.historicoCompras}" var="compra"
+                         paginator="true" rows="15" paginatorPosition="bottom"
+                         filteredValue="#{historicoComprasBean.historicoFiltrado}"
+                         emptyMessage="Nenhuma compra encontrada no histórico.">
+
+                <p:column headerText="ID" sortBy="#{compra.id}" filterBy="#{compra.id}" style="width:80px;">
+                    <h:outputText value="#{compra.id}" />
+                </p:column>
+
+                <p:column headerText="Fornecedor" sortBy="#{compra.fornecedor.nome}" filterBy="#{compra.fornecedor.nome}" filterMatchMode="contains">
+                    <h:outputText value="#{compra.fornecedor.nome}" />
+                </p:column>
+
+                <p:column headerText="Produto" sortBy="#{compra.produto.nome}" filterBy="#{compra.produto.nome}" filterMatchMode="contains">
+                    <h:outputText value="#{compra.produto.nome}" />
+                </p:column>
+
+                <p:column headerText="Preço Unitário" sortBy="#{compra.precoUnitario}">
+                    <h:outputText value="#{compra.precoUnitario}">
+                        <f:convertNumber type="currency" currencySymbol="R$ "/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Quantidade" sortBy="#{compra.quantidade}" style="width:120px;">
+                    <h:outputText value="#{compra.quantidade}" />
+                </p:column>
+
+                <p:column headerText="Valor Total" sortBy="#{compra.total}">
+                    <h:outputText value="#{compra.total}">
+                        <f:convertNumber type="currency" currencySymbol="R$ "/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Data" sortBy="#{compra.dataCompra}" style="width:160px;">
+                    <h:outputText value="#{compra.dataCompra}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Ações" style="width:120px; text-align: center;">
+                    <p:commandButton value="Remover" action="#{historicoComprasBean.remover(compra)}"
+                                     update="tabelaCompras" icon="pi pi-trash"
+                                     styleClass="ui-button-raised ui-button-danger">
+                        <p:confirm header="Confirmação" message="Tem certeza que deseja remover esta compra do histórico?" icon="pi pi-exclamation-triangle"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </h:form>
+
+    <br/>
+    <p:button value="Voltar" outcome="gerenciar-fornecedores.xhtml" icon="pi pi-arrow-left"/>
+
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+    </p:confirmDialog>
+</h:body>
+</html>

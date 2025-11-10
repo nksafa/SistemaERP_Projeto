@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"> <h:head>
+    <title>Gerenciar Clientes</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+    <h1>Gerenciar Clientes</h1>
+    <p:messages id="messages" globalOnly="true" closable="true"/>
+
+    <h:form id="formClientes">
+        <h3>Cadastrar / Editar Cliente</h3>
+        <p:panelGrid id="painelCadastro" columns="2">
+            <p:outputLabel value="Nome:" for="nome" />
+            <p:inputText id="nome" value="#{clienteBean.cliente.nome}" required="true" requiredMessage="O nome é obrigatório."/>
+
+            <p:outputLabel value="CPF:" for="cpf" />
+            <p:inputMask id="cpf" value="#{clienteBean.cliente.cpf}" required="true" requiredMessage="O CPF é obrigatório." mask="999.999.999-99"/>
+        </p:panelGrid>
+        <br/>
+        <p:commandButton value="Salvar" action="#{clienteBean.salvar}" update="@form messages" />
+
+        <br/><br/>
+        <h3>Lista de Clientes</h3>
+        <p:dataTable id="tabelaClientes" value="#{clienteBean.listaClientes}" var="cli"
+                     paginator="true" rows="10" paginatorPosition="bottom"
+                     emptyMessage="Nenhum cliente encontrado.">
+
+            <p:column headerText="ID">#{cli.id}</p:column>
+            <p:column headerText="Nome">#{cli.nome}</p:column>
+            <p:column headerText="CPF">#{cli.cpf}</p:column>
+
+            <p:column headerText="Ações" style="width: 160px; text-align: center;">
+
+                <div style="display: flex; justify-content: center; gap: 8px;">
+
+                    <p:commandButton icon="pi pi-pencil" title="Editar"
+                                     action="#{clienteBean.editar(cli)}"
+                                     process="@this" update=":formClientes:painelCadastro"
+                                     styleClass="rounded-button ui-button-secondary ui-button-outlined"/>
+
+                    <p:commandButton icon="pi pi-trash" title="Remover"
+                                     action="#{clienteBean.remover(cli)}"
+                                     update=":formClientes:tabelaClientes"
+                                     styleClass="rounded-button ui-button-danger ui-button-outlined">
+                        <p:confirm header="Confirmação" message="Deseja remover este cliente?" icon="pi pi-exclamation-triangle"/>
+                    </p:commandButton>
+
+                    <p:button icon="pi pi-list" title="Ver Histórico de Compras"
+                              outcome="historico-cliente.xhtml"
+                              styleClass="rounded-button ui-button-help ui-button-outlined">
+                        <f:param name="clienteId" value="#{cli.id}"/>
+                    </p:button>
+
+                </div>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+    <br/>
+    <p:button value="Voltar" outcome="dashboard.xhtml" />
+
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+    </p:confirmDialog>
+</h:body>
+</html>

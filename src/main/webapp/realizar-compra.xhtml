@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"> <f:metadata>
+    <f:viewParam name="fornecedorId" value="#{compraBean.fornecedorId}" />
+    <f:viewAction action="#{compraBean.carregarDadosIniciais}" />
+</f:metadata>
+
+<h:head>
+    <title>Realizar Compra</title>
+    <h:outputStylesheet name="css/estilo.css" />
+</h:head>
+<h:body>
+    <p:growl id="messages" globalOnly="true" />
+
+    <h:form id="formCompra">
+        <p:panel header="Realizar Compra de #{compraBean.fornecedorAtual.nome}">
+            <p:panelGrid columns="2" styleClass="ui-noborder">
+
+                <p:outputLabel for="produto" value="Selecione o Produto:" />
+                <p:selectOneMenu id="produto" value="#{compraBean.produtoSelecionadoId}" filter="true" filterMatchMode="contains" required="true">
+                    <f:selectItem itemLabel="Selecione..." itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{compraBean.produtosDoFornecedor}" var="prod" itemLabel="#{prod.nome} - R$#{prod.precoCusto}" itemValue="#{prod.id}"/>
+                    <p:ajax update="painelTotal" />
+                </p:selectOneMenu>
+
+                <p:outputLabel for="quantidade" value="Quantidade:" />
+                <p:inputNumber id="quantidade" value="#{compraBean.quantidade}" minValue="1" decimalPlaces="0" required="true">
+                    <p:ajax event="keyup" update="painelTotal" />
+                </p:inputNumber>
+
+            </p:panelGrid>
+
+            <p:panelGrid id="painelTotal" columns="1" style="margin-top: 20px;">
+                <h:outputText value="Valor Total: R$ #{compraBean.totalDaCompra}"
+                              style="font-weight: bold; font-size: 1.2em;"
+                              rendered="#{compraBean.totalDaCompra > 0}" />
+            </p:panelGrid>
+
+            <br/>
+
+            <p:commandButton value="Finalizar Compra" action="#{compraBean.realizarCompra}"
+                             update="@form :messages" icon="pi pi-check" />
+
+        </p:panel>
+    </h:form>
+
+    <br/>
+    <p:button value="Voltar" outcome="gerenciar-fornecedores.xhtml" icon="pi pi-arrow-left" />
+
+</h:body>
+</html>
