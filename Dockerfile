@@ -11,7 +11,7 @@ WORKDIR /usr/local/tomcat/webapps/
 
 # 3. Copia o .war gerado no passo anterior para dentro do Tomcat
 # IMPORTANTE: Renomeamos para ROOT.war para que abra direto no link (sem /ProjetoPOO3)
-COPY --from=build /app/target/ProjetoPOO3.war ./ROOT.war
+COPY --from=build /app/target/ProjetoPOO3-1.0-SNAPSHOT.war ./ROOT.war
 
 # 4. Expõe a porta padrão do Tomcat
 EXPOSE 8080
