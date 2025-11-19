@@ -1,6 +1,9 @@
 # Sistema ERP - Gestão de Loja de Suplementos
 
-[![NPM](https://img.shields.io/npm/l/react)](https://github.com/nksafa/SistemaERP_Projeto/blob/main/LICENSE) 
+![Java](https://img.shields.io/badge/-Java-DE252C?style=flat-square&logo=java&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-square&logo=linux&logoColor=black)
+![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-square&logo=windows&logoColor=white)
+[![NPM](https://img.shields.io/npm/l/react)](https://github.com/nksafa/SistemaERP_Projeto/blob/main/LICENSE)
 
 # Sobre o projeto
 
@@ -11,6 +14,9 @@ O sistema controla o fluxo completo de vendas (PDV), gerenciamento de estoque co
 A aplicação foi desenvolvida utilizando a arquitetura MVC, separando claramente as responsabilidades entre a interface rica (JSF/PrimeFaces) e a lógica de negócios.
 
 ## Layout Web
+https://sistemaerpprojeto-production.up.railway.app/
+login: admin
+senha: senhaadmin
 
 <img width="1913" height="729" alt="image" src="https://github.com/user-attachments/assets/e6972d11-ee51-4f76-90c8-68757148c91c" />
 <img width="1896" height="990" alt="image" src="https://github.com/user-attachments/assets/ce639c46-8e2a-4947-b004-724c6339ab47" />
@@ -64,19 +70,19 @@ O projeto foi estruturado seguindo as melhores práticas de separação de respo
 
 ### Back end
 - Java 11
-- Hibernate 5.6 (JPA Implementation)
-- Maven (Gerenciamento de dependências)
-- Apache Tomcat 9 (Servidor de Aplicação)
-- MySQL 8 (Banco de Dados)
+- Hibernate 5.6
+- Maven
+- Apache Tomcat 9
+- MySQL 8
 
 ### Front end
 - JavaServer Faces (JSF) 2.2
-- PrimeFaces 10.0.0 (Biblioteca de Componentes Visuais)
+- PrimeFaces 10.0.0
 - HTML5 / CSS3
 
-### Implantação (Deploy)
-- Docker (Containerização)
-- Railway (Plataforma de Nuvem)
+### Deploy
+- Docker
+- Railway
 
 ---
 
