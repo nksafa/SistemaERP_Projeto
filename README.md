@@ -3,7 +3,7 @@
 ![Java](https://img.shields.io/badge/-Java-DE252C?style=flat-square&logo=java&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-square&logo=linux&logoColor=black)
 ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-square&logo=windows&logoColor=white)
-[![NPM](https://img.shields.io/npm/l/react)](https://github.com/nksafa/SistemaERP_Projeto/blob/main/LICENSE)
+[![NPM](https://img.shields.io/npm/l/react)](https://github.com/nicholascoda/SistemaERP_Projeto/blob/main/LICENSE)
 
 # Sobre o projeto
 
