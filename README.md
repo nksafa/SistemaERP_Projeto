@@ -15,7 +15,9 @@ A aplicação foi desenvolvida utilizando a arquitetura MVC, separando clarament
 
 ## Layout Web
 https://sistemaerpprojeto-production.up.railway.app/
+
 login: admin
+
 senha: senhaadmin
 
 <img width="1913" height="729" alt="image" src="https://github.com/user-attachments/assets/e6972d11-ee51-4f76-90c8-68757148c91c" />
