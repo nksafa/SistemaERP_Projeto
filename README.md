@@ -100,7 +100,7 @@ O projeto foi estruturado seguindo as melhores práticas de separação de respo
 
 ```bash
 # Clone o repositório
-git clone [https://github.com/seu-usuario/nome-do-projeto.git](https://github.com/nksafa/SistemaERP_Projeto.git)
+git clone [https://github.com/nksafa/SistemaERP_Projeto.git](https://github.com/nksafa/SistemaERP_Projeto.git)
 
 # Entre na pasta do projeto
 cd SistemaERP_Projeto
