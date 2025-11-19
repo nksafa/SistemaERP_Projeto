@@ -49,12 +49,9 @@ A aplicação foi desenvolvida utilizando a arquitetura MVC, separando clarament
 
 ---
 
-# Modelo de Domínio (Arquitetura)
+# Arquitetura
 
 O projeto foi estruturado seguindo as melhores práticas de separação de responsabilidades em camadas:
-
-![Arquitetura](https://raw.githubusercontent.com/nksafa/SistemaERP_Projeto/main/assets/arquitetura.png)
-*(Opcional: coloque um desenho simples aqui se tiver, ou use a descrição abaixo)*
 
 * **com.suplementos.erp.model**: Camada de Entidades (JPA) que espelham o banco de dados.
 * **com.suplementos.erp.repository**: Camada de Acesso a Dados (DAO) responsável pela comunicação com o MySQL via Hibernate.
@@ -95,10 +92,10 @@ O projeto foi estruturado seguindo as melhores práticas de separação de respo
 
 ```bash
 # Clone o repositório
-git clone [https://github.com/seu-usuario/nome-do-projeto.git](https://github.com/seu-usuario/nome-do-projeto.git)
+git clone [https://github.com/seu-usuario/nome-do-projeto.git](https://github.com/nksafa/SistemaERP_Projeto.git)
 
 # Entre na pasta do projeto
-cd nome-do-projeto
+cd SistemaERP_Projeto
 
 # Configuração do Banco de Dados
 # 1. Crie um banco de dados no MySQL chamado 'db_suplementos'
@@ -107,7 +104,7 @@ cd nome-do-projeto
 # Executar o projeto (via IDE)
 # 1. Abra o projeto no IntelliJ como projeto Maven.
 # 2. Configure o servidor Tomcat Local apontando para o artefato :war exploded.
-# 3. Execute (Run).
+# 3. Execute.
 
 # Acesso
 O sistema estará disponível em: http://localhost:8080/ProjetoPOO3/
